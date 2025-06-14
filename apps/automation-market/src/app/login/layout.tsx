@@ -4,11 +4,11 @@ import '@ant-design/v5-patch-for-react-19';
 import '../global.css';
 
 export const metadata = {
-  title: 'Forgot Password - Facebook Automation Dashboard',
-  description: 'Reset your Facebook automation dashboard password',
+  title: 'Login - Facebook Automation Dashboard',
+  description: 'Sign in to your Facebook automation dashboard',
 };
 
-export default function ForgotPasswordLayout({
+export default function LoginLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -16,9 +16,7 @@ export default function ForgotPasswordLayout({
   return (
     <html lang="en">
       <body>
-        <AntdRegistry>
-          {children}
-        </AntdRegistry>
+        <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>
   );

@@ -1,14 +1,14 @@
 import React from 'react';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import '@ant-design/v5-patch-for-react-19';
-import './global.css';
+import '../global.css';
 
 export const metadata = {
-  title: 'Facebook Automation Dashboard',
-  description: 'Automated Facebook management system built with Next.js and Ant Design',
+  title: 'Forgot Password - Facebook Automation Dashboard',
+  description: 'Reset your Facebook automation dashboard password',
 };
 
-export default function RootLayout({
+export default function ForgotPasswordLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -16,9 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AntdRegistry>
-          {children}
-        </AntdRegistry>
+        <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>
   );

@@ -1,7 +1,22 @@
 'use client';
 import React from 'react';
-import { Form, Input, Button, Card, Typography, Space, Divider, Checkbox } from 'antd';
-import { UserOutlined, LockOutlined, MailOutlined, FacebookOutlined, GoogleOutlined } from '@ant-design/icons';
+import {
+  Form,
+  Input,
+  Button,
+  Card,
+  Typography,
+  Space,
+  Divider,
+  Checkbox,
+} from 'antd';
+import {
+  UserOutlined,
+  LockOutlined,
+  MailOutlined,
+  FacebookOutlined,
+  GoogleOutlined,
+} from '@ant-design/icons';
 import Link from 'next/link';
 
 const { Title, Text } = Typography;
@@ -24,10 +39,10 @@ export default function RegisterPage() {
     try {
       // TODO: Implement actual registration logic
       console.log('Registration attempt:', values);
-      
+
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // TODO: Handle successful registration
       alert('Registration successful!');
     } catch (error) {
@@ -38,30 +53,36 @@ export default function RegisterPage() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      padding: '20px'
-    }}>
-      <Card 
-        style={{ 
-          width: '100%', 
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        padding: '20px',
+      }}
+    >
+      <Card
+        style={{
+          width: '100%',
           maxWidth: 450,
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
         }}
       >
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
           <div style={{ textAlign: 'center' }}>
-            <FacebookOutlined style={{ fontSize: '48px', color: '#1890ff', marginBottom: '16px' }} />
+            <FacebookOutlined
+              style={{
+                fontSize: '48px',
+                color: '#1890ff',
+                marginBottom: '16px',
+              }}
+            />
             <Title level={2} style={{ margin: 0 }}>
               Create Account
             </Title>
-            <Text type="secondary">
-              Join Facebook Automation Dashboard
-            </Text>
+            <Text type="secondary">Join Facebook Automation Dashboard</Text>
           </div>
 
           <Form
@@ -75,7 +96,9 @@ export default function RegisterPage() {
               <Form.Item
                 name="firstName"
                 label="First Name"
-                rules={[{ required: true, message: 'Please input your first name!' }]}
+                rules={[
+                  { required: true, message: 'Please input your first name!' },
+                ]}
                 style={{ flex: 1 }}
               >
                 <Input placeholder="First name" />
@@ -84,7 +107,9 @@ export default function RegisterPage() {
               <Form.Item
                 name="lastName"
                 label="Last Name"
-                rules={[{ required: true, message: 'Please input your last name!' }]}
+                rules={[
+                  { required: true, message: 'Please input your last name!' },
+                ]}
                 style={{ flex: 1 }}
               >
                 <Input placeholder="Last name" />
@@ -96,13 +121,10 @@ export default function RegisterPage() {
               label="Email"
               rules={[
                 { required: true, message: 'Please input your email!' },
-                { type: 'email', message: 'Please enter a valid email!' }
+                { type: 'email', message: 'Please enter a valid email!' },
               ]}
             >
-              <Input 
-                prefix={<MailOutlined />} 
-                placeholder="Enter your email"
-              />
+              <Input prefix={<MailOutlined />} placeholder="Enter your email" />
             </Form.Item>
 
             <Form.Item
@@ -110,11 +132,11 @@ export default function RegisterPage() {
               label="Password"
               rules={[
                 { required: true, message: 'Please input your password!' },
-                { min: 8, message: 'Password must be at least 8 characters!' }
+                { min: 8, message: 'Password must be at least 8 characters!' },
               ]}
             >
-              <Input.Password 
-                prefix={<LockOutlined />} 
+              <Input.Password
+                prefix={<LockOutlined />}
                 placeholder="Create password"
               />
             </Form.Item>
@@ -135,8 +157,8 @@ export default function RegisterPage() {
                 }),
               ]}
             >
-              <Input.Password 
-                prefix={<LockOutlined />} 
+              <Input.Password
+                prefix={<LockOutlined />}
                 placeholder="Confirm password"
               />
             </Form.Item>
@@ -145,9 +167,13 @@ export default function RegisterPage() {
               name="terms"
               valuePropName="checked"
               rules={[
-                { 
+                {
                   validator: (_, value) =>
-                    value ? Promise.resolve() : Promise.reject(new Error('Please accept the terms and conditions!')),
+                    value
+                      ? Promise.resolve()
+                      : Promise.reject(
+                          new Error('Please accept the terms and conditions!')
+                        ),
                 },
               ]}
             >
@@ -164,9 +190,9 @@ export default function RegisterPage() {
             </Form.Item>
 
             <Form.Item>
-              <Button 
-                type="primary" 
-                htmlType="submit" 
+              <Button
+                type="primary"
+                htmlType="submit"
                 loading={loading}
                 block
                 style={{ height: '40px' }}
@@ -179,16 +205,12 @@ export default function RegisterPage() {
           <Divider>Or continue with</Divider>
 
           <Space direction="vertical" style={{ width: '100%' }}>
-            <Button 
-              icon={<GoogleOutlined />} 
-              block 
-              style={{ height: '40px' }}
-            >
+            <Button icon={<GoogleOutlined />} block style={{ height: '40px' }}>
               Continue with Google
             </Button>
-            <Button 
-              icon={<FacebookOutlined />} 
-              block 
+            <Button
+              icon={<FacebookOutlined />}
+              block
               style={{ height: '40px' }}
             >
               Continue with Facebook

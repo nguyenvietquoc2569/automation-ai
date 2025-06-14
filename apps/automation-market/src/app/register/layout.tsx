@@ -4,11 +4,11 @@ import '@ant-design/v5-patch-for-react-19';
 import '../global.css';
 
 export const metadata = {
-  title: 'Login - Facebook Automation Dashboard',
-  description: 'Sign in to your Facebook automation dashboard',
+  title: 'Register - Facebook Automation Dashboard',
+  description: 'Create your Facebook automation dashboard account',
 };
 
-export default function LoginLayout({
+export default function RegisterLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -16,9 +16,7 @@ export default function LoginLayout({
   return (
     <html lang="en">
       <body>
-        <AntdRegistry>
-          {children}
-        </AntdRegistry>
+        <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>
   );

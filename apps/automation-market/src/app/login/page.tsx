@@ -1,7 +1,21 @@
 'use client';
 import React from 'react';
-import { Form, Input, Button, Card, Typography, Space, Divider, Checkbox } from 'antd';
-import { UserOutlined, LockOutlined, FacebookOutlined, GoogleOutlined } from '@ant-design/icons';
+import {
+  Form,
+  Input,
+  Button,
+  Card,
+  Typography,
+  Space,
+  Divider,
+  Checkbox,
+} from 'antd';
+import {
+  UserOutlined,
+  LockOutlined,
+  FacebookOutlined,
+  GoogleOutlined,
+} from '@ant-design/icons';
 import Link from 'next/link';
 
 const { Title, Text } = Typography;
@@ -21,10 +35,10 @@ export default function LoginPage() {
     try {
       // TODO: Implement actual login logic
       console.log('Login attempt:', values);
-      
+
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // TODO: Handle successful login (redirect, store token, etc.)
       alert('Login successful!');
     } catch (error) {
@@ -35,30 +49,36 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      padding: '20px'
-    }}>
-      <Card 
-        style={{ 
-          width: '100%', 
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        padding: '20px',
+      }}
+    >
+      <Card
+        style={{
+          width: '100%',
           maxWidth: 400,
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
         }}
       >
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
           <div style={{ textAlign: 'center' }}>
-            <FacebookOutlined style={{ fontSize: '48px', color: '#1890ff', marginBottom: '16px' }} />
+            <FacebookOutlined
+              style={{
+                fontSize: '48px',
+                color: '#1890ff',
+                marginBottom: '16px',
+              }}
+            />
             <Title level={2} style={{ margin: 0 }}>
               Facebook Automation
             </Title>
-            <Text type="secondary">
-              Sign in to your dashboard
-            </Text>
+            <Text type="secondary">Sign in to your dashboard</Text>
           </div>
 
           <Form
@@ -73,13 +93,10 @@ export default function LoginPage() {
               label="Email"
               rules={[
                 { required: true, message: 'Please input your email!' },
-                { type: 'email', message: 'Please enter a valid email!' }
+                { type: 'email', message: 'Please enter a valid email!' },
               ]}
             >
-              <Input 
-                prefix={<UserOutlined />} 
-                placeholder="Enter your email"
-              />
+              <Input prefix={<UserOutlined />} placeholder="Enter your email" />
             </Form.Item>
 
             <Form.Item
@@ -87,17 +104,23 @@ export default function LoginPage() {
               label="Password"
               rules={[
                 { required: true, message: 'Please input your password!' },
-                { min: 6, message: 'Password must be at least 6 characters!' }
+                { min: 6, message: 'Password must be at least 6 characters!' },
               ]}
             >
-              <Input.Password 
-                prefix={<LockOutlined />} 
+              <Input.Password
+                prefix={<LockOutlined />}
                 placeholder="Enter your password"
               />
             </Form.Item>
 
             <Form.Item>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
                 <Form.Item name="remember" valuePropName="checked" noStyle>
                   <Checkbox>Remember me</Checkbox>
                 </Form.Item>
@@ -108,9 +131,9 @@ export default function LoginPage() {
             </Form.Item>
 
             <Form.Item>
-              <Button 
-                type="primary" 
-                htmlType="submit" 
+              <Button
+                type="primary"
+                htmlType="submit"
                 loading={loading}
                 block
                 style={{ height: '40px' }}
@@ -123,16 +146,12 @@ export default function LoginPage() {
           <Divider>Or continue with</Divider>
 
           <Space direction="vertical" style={{ width: '100%' }}>
-            <Button 
-              icon={<GoogleOutlined />} 
-              block 
-              style={{ height: '40px' }}
-            >
+            <Button icon={<GoogleOutlined />} block style={{ height: '40px' }}>
               Continue with Google
             </Button>
-            <Button 
-              icon={<FacebookOutlined />} 
-              block 
+            <Button
+              icon={<FacebookOutlined />}
+              block
               style={{ height: '40px' }}
             >
               Continue with Facebook

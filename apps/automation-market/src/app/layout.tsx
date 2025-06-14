@@ -1,14 +1,15 @@
 import React from 'react';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import '@ant-design/v5-patch-for-react-19';
-import '../global.css';
+import './global.css';
 
 export const metadata = {
-  title: 'Register - Facebook Automation Dashboard',
-  description: 'Create your Facebook automation dashboard account',
+  title: 'Facebook Automation Dashboard',
+  description:
+    'Automated Facebook management system built with Next.js and Ant Design',
 };
 
-export default function RegisterLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -16,9 +17,7 @@ export default function RegisterLayout({
   return (
     <html lang="en">
       <body>
-        <AntdRegistry>
-          {children}
-        </AntdRegistry>
+        <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>
   );

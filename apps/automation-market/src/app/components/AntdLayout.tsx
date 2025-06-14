@@ -21,7 +21,7 @@ function getItem(
   label: React.ReactNode,
   key: React.Key,
   icon?: React.ReactNode,
-  children?: MenuItem[],
+  children?: MenuItem[]
 ): MenuItem {
   return {
     key,
@@ -40,8 +40,8 @@ const items: MenuItem[] = [
     getItem('User Settings', '5'),
   ]),
   getItem('Teams', 'sub2', <TeamOutlined />, [
-    getItem('Team Management', '6'), 
-    getItem('Team Analytics', '8')
+    getItem('Team Management', '6'),
+    getItem('Team Analytics', '8'),
   ]),
   getItem('Files', '9', <FileOutlined />),
 ];
@@ -86,13 +86,39 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className="demo-logo-vertical" style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.3)' }} />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
+        <div
+          className="demo-logo-vertical"
+          style={{
+            height: 32,
+            margin: 16,
+            background: 'rgba(255, 255, 255, 0.3)',
+          }}
+        />
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={['1']}
+          mode="inline"
+          items={items}
+        />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ padding: '0 24px', fontSize: '18px', fontWeight: 'bold' }}>
+        <Header
+          style={{
+            padding: 0,
+            background: colorBgContainer,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            style={{ padding: '0 24px', fontSize: '18px', fontWeight: 'bold' }}
+          >
             Facebook Automation Dashboard
           </div>
           <div style={{ padding: '0 24px' }}>
@@ -105,12 +131,9 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
           </div>
         </Header>
         <Content style={{ margin: '0 16px' }}>
-          <Breadcrumb 
+          <Breadcrumb
             style={{ margin: '16px 0' }}
-            items={[
-              { title: 'User' },
-              { title: 'Dashboard' }
-            ]}
+            items={[{ title: 'User' }, { title: 'Dashboard' }]}
           />
           <div
             style={{
@@ -124,7 +147,8 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Facebook Automation ©{new Date().getFullYear()} Created with Ant Design
+          Facebook Automation ©{new Date().getFullYear()} Created with Ant
+          Design
         </Footer>
       </Layout>
     </Layout>
