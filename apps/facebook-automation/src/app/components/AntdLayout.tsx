@@ -1,13 +1,16 @@
 'use client';
 import React from 'react';
-import { Layout, Menu, Breadcrumb, theme } from 'antd';
+import { Layout, Menu, Breadcrumb, theme, Dropdown, Avatar, Space } from 'antd';
 import {
   DesktopOutlined,
   PieChartOutlined,
   FileOutlined,
   TeamOutlined,
   UserOutlined,
+  LogoutOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
+import { useRouter } from 'next/navigation';
 import type { MenuProps } from 'antd';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -49,9 +52,37 @@ interface AntdLayoutProps {
 
 export default function AntdLayout({ children }: AntdLayoutProps) {
   const [collapsed, setCollapsed] = React.useState(false);
+  const router = useRouter();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const handleLogout = () => {
+    // TODO: Implement actual logout logic (clear tokens, etc.)
+    router.push('/login');
+  };
+
+  const userMenuItems = [
+    {
+      key: 'profile',
+      icon: <UserOutlined />,
+      label: 'Profile',
+    },
+    {
+      key: 'settings',
+      icon: <SettingOutlined />,
+      label: 'Settings',
+    },
+    {
+      type: 'divider' as const,
+    },
+    {
+      key: 'logout',
+      icon: <LogoutOutlined />,
+      label: 'Logout',
+      onClick: handleLogout,
+    },
+  ];
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -60,9 +91,17 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Header style={{ padding: 0, background: colorBgContainer, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ padding: '0 24px', fontSize: '18px', fontWeight: 'bold' }}>
             Facebook Automation Dashboard
+          </div>
+          <div style={{ padding: '0 24px' }}>
+            <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
+              <Space style={{ cursor: 'pointer' }}>
+                <Avatar icon={<UserOutlined />} />
+                <span>John Doe</span>
+              </Space>
+            </Dropdown>
           </div>
         </Header>
         <Content style={{ margin: '0 16px' }}>
