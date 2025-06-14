@@ -16,19 +16,19 @@
 To run the dev server for your app, use:
 
 ```sh
-npx nx dev facebook-automation
+npx nx dev automation-market
 ```
 
 To create a production bundle:
 
 ```sh
-npx nx build facebook-automation
+npx nx build automation-market
 ```
 
 To see all available targets to run for a project, run:
 
 ```sh
-npx nx show project facebook-automation
+npx nx show project automation-market
 ```
 
 These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.

@@ -4,8 +4,8 @@ import '@ant-design/v5-patch-for-react-19';
 import '../global.css';
 
 export const metadata = {
-  title: 'Login - Facebook Automation Dashboard',
-  description: 'Sign in to your Facebook automation dashboard',
+  title: 'Login - Automation Market Dashboard',
+  description: 'Sign in to your automation marketplace',
 };
 
 export default function LoginLayout({

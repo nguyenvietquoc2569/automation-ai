@@ -13,8 +13,9 @@ import {
 import {
   UserOutlined,
   LockOutlined,
-  FacebookOutlined,
+  RobotOutlined,
   GoogleOutlined,
+  FacebookOutlined,
 } from '@ant-design/icons';
 import Link from 'next/link';
 
@@ -68,7 +69,7 @@ export default function LoginPage() {
       >
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
           <div style={{ textAlign: 'center' }}>
-            <FacebookOutlined
+            <RobotOutlined
               style={{
                 fontSize: '48px',
                 color: '#1890ff',
@@ -76,7 +77,7 @@ export default function LoginPage() {
               }}
             />
             <Title level={2} style={{ margin: 0 }}>
-              Facebook Automation
+              Automation Market
             </Title>
             <Text type="secondary">Sign in to your dashboard</Text>
           </div>

@@ -4,8 +4,8 @@ import '@ant-design/v5-patch-for-react-19';
 import '../global.css';
 
 export const metadata = {
-  title: 'Forgot Password - Facebook Automation Dashboard',
-  description: 'Reset your Facebook automation dashboard password',
+  title: 'Forgot Password - Automation Market Dashboard',
+  description: 'Reset your automation marketplace password',
 };
 
 export default function ForgotPasswordLayout({

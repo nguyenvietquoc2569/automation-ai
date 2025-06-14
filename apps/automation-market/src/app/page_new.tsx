@@ -10,9 +10,9 @@ export default function Index() {
     <div className={styles.page}>
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
         <div>
-          <Title level={2}>Welcome to Facebook Automation Dashboard 🤖</Title>
+          <Title level={2}>Welcome to Automation Market Dashboard 🤖</Title>
           <Paragraph>
-            Manage your Facebook automation tasks efficiently with our
+            Manage your automation tasks efficiently with our
             comprehensive dashboard.
           </Paragraph>
         </div>

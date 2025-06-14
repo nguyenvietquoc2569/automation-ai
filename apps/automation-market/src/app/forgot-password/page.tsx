@@ -3,7 +3,7 @@ import React from 'react';
 import { Form, Input, Button, Card, Typography, Space, Result } from 'antd';
 import {
   MailOutlined,
-  FacebookOutlined,
+  RobotOutlined,
   ArrowLeftOutlined,
 } from '@ant-design/icons';
 import Link from 'next/link';
@@ -90,7 +90,7 @@ export default function ForgotPasswordPage() {
       >
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
           <div style={{ textAlign: 'center' }}>
-            <FacebookOutlined
+            <RobotOutlined
               style={{
                 fontSize: '48px',
                 color: '#1890ff',
@@ -101,7 +101,7 @@ export default function ForgotPasswordPage() {
               Forgot Password?
             </Title>
             <Text type="secondary">
-              Enter your email address and we'll send you a link to reset your
+              Enter your email address and we&apos;ll send you a link to reset your
               password.
             </Text>
           </div>

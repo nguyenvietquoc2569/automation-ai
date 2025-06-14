@@ -4,9 +4,9 @@ import '@ant-design/v5-patch-for-react-19';
 import './global.css';
 
 export const metadata = {
-  title: 'Facebook Automation Dashboard',
+  title: 'Automation Market Dashboard',
   description:
-    'Automated Facebook management system built with Next.js and Ant Design',
+    'Comprehensive automation marketplace built with Next.js and Ant Design',
 };
 
 export default function RootLayout({

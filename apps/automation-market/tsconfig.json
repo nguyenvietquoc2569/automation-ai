@@ -24,8 +24,8 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
   },
   "include": [
-    "../../apps/facebook-automation/.next/types/**/*.ts",
-    "../../dist/apps/facebook-automation/.next/types/**/*.ts",
+    "../../apps/automation-market/.next/types/**/*.ts",
+    "../../dist/apps/automation-market/.next/types/**/*.ts",
     "next-env.d.ts",
     "src/**/*.js",
     "src/**/*.jsx",

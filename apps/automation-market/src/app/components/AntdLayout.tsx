@@ -9,6 +9,7 @@ import {
   UserOutlined,
   LogoutOutlined,
   SettingOutlined,
+  RobotOutlined,
 } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import type { MenuProps } from 'antd';
@@ -92,13 +93,36 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
         onCollapse={(value) => setCollapsed(value)}
       >
         <div
-          className="demo-logo-vertical"
           style={{
-            height: 32,
-            margin: 16,
-            background: 'rgba(255, 255, 255, 0.3)',
+            height: 64,
+            margin: '16px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: '6px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: collapsed ? 'row' : 'column',
+            transition: 'all 0.3s',
           }}
-        />
+        >
+          <RobotOutlined 
+            style={{ 
+              fontSize: collapsed ? '20px' : '24px', 
+              color: '#1890ff',
+              marginBottom: collapsed ? 0 : '4px',
+            }} 
+          />
+          {!collapsed && (
+            <div style={{ 
+              color: 'white', 
+              fontSize: '12px', 
+              fontWeight: 'bold',
+              textAlign: 'center' 
+            }}>
+              Automation Market
+            </div>
+          )}
+        </div>
         <Menu
           theme="dark"
           defaultSelectedKeys={['1']}
@@ -119,7 +143,7 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
           <div
             style={{ padding: '0 24px', fontSize: '18px', fontWeight: 'bold' }}
           >
-            Facebook Automation Dashboard
+            Automation Market Dashboard
           </div>
           <div style={{ padding: '0 24px' }}>
             <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
@@ -147,7 +171,7 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Facebook Automation ©{new Date().getFullYear()} Created with Ant
+          Automation Market ©{new Date().getFullYear()} Created with Ant
           Design
         </Footer>
       </Layout>

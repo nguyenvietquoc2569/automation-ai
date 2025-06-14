@@ -11,11 +11,11 @@ import {
   Checkbox,
 } from 'antd';
 import {
-  UserOutlined,
   LockOutlined,
   MailOutlined,
-  FacebookOutlined,
+  RobotOutlined,
   GoogleOutlined,
+  FacebookOutlined,
 } from '@ant-design/icons';
 import Link from 'next/link';
 
@@ -72,7 +72,7 @@ export default function RegisterPage() {
       >
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
           <div style={{ textAlign: 'center' }}>
-            <FacebookOutlined
+            <RobotOutlined
               style={{
                 fontSize: '48px',
                 color: '#1890ff',
@@ -82,7 +82,7 @@ export default function RegisterPage() {
             <Title level={2} style={{ margin: 0 }}>
               Create Account
             </Title>
-            <Text type="secondary">Join Facebook Automation Dashboard</Text>
+            <Text type="secondary">Join Automation Market Dashboard</Text>
           </div>
 
           <Form
