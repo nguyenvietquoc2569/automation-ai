@@ -16,6 +16,12 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": ["development"]
+    "customConditions": ["development"],
+    "paths": {
+      "@automation-ai/login-page": ["libs/feature/user-auth/login-page/src/index.ts"],
+      "@automation-ai/multiple-lang": ["libs/shared/multiple-lang/src/index.ts"],
+      "@automation-ai/forget-page": ["libs/feature/user-auth/forget-page/src/index.ts"],
+      "@automation-ai/user-register-page": ["libs/feature/user-auth/user-register-page/src/index.ts"]
+    }
   }
 }

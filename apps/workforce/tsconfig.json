@@ -17,10 +17,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@automation-ai/login-page": ["../../libs/feature/user-auth/login-page/src/index.ts"]
     },
     "outDir": "dist",
-    "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
   },
   "include": [
@@ -33,6 +33,11 @@
     "src/**/*.tsx",
     "src/**/*.json",
     ".next/types/**/*.ts"
+  ],
+  "references": [
+    {
+      "path": "../../libs/feature/user-auth/login-page"
+    }
   ],
   "exclude": [
     "out-tsc",

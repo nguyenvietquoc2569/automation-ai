@@ -1,0 +1,33 @@
+{
+  "name": "login-page",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/feature/user-auth/login-page/src",
+  "projectType": "library",
+  "tags": ["scope:feature", "type:ui"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/feature/user-auth/login-page",
+        "main": "libs/feature/user-auth/login-page/src/index.ts",
+        "tsConfig": "libs/feature/user-auth/login-page/tsconfig.lib.json",
+        "assets": ["libs/feature/user-auth/login-page/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/feature/user-auth/login-page/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "typecheck": {
+      "executor": "@nx/js:tsc",
+      "options": {
+        "tsConfig": "libs/feature/user-auth/login-page/tsconfig.lib.json",
+        "noEmit": true
+      }
+    }
+  }
+}
