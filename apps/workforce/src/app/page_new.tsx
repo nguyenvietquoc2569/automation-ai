@@ -12,8 +12,8 @@ export default function Index() {
         <div>
           <Title level={2}>Welcome to Automation Market Dashboard 🤖</Title>
           <Paragraph>
-            Manage your automation tasks efficiently with our
-            comprehensive dashboard.
+            Manage your automation tasks efficiently with our comprehensive
+            dashboard.
           </Paragraph>
         </div>
 

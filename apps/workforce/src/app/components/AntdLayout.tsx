@@ -105,20 +105,22 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
             transition: 'all 0.3s',
           }}
         >
-          <RobotOutlined 
-            style={{ 
-              fontSize: collapsed ? '20px' : '24px', 
+          <RobotOutlined
+            style={{
+              fontSize: collapsed ? '20px' : '24px',
               color: '#1890ff',
               marginBottom: collapsed ? 0 : '4px',
-            }} 
+            }}
           />
           {!collapsed && (
-            <div style={{ 
-              color: 'white', 
-              fontSize: '12px', 
-              fontWeight: 'bold',
-              textAlign: 'center' 
-            }}>
+            <div
+              style={{
+                color: 'white',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}
+            >
               Automation Market
             </div>
           )}
@@ -171,8 +173,7 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Automation Market ©{new Date().getFullYear()} Created with Ant
-          Design
+          Automation Market ©{new Date().getFullYear()} Created with Ant Design
         </Footer>
       </Layout>
     </Layout>
