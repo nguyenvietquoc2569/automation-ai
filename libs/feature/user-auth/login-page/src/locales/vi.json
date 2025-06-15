@@ -1,0 +1,10 @@
+{
+  "auth.loginToAccount": "Đăng nhập vào tài khoản của bạn",
+  "auth.email": "Email",
+  "auth.password": "Mật Khẩu",
+  "auth.rememberMe": "Ghi nhớ đăng nhập",
+  "auth.forgotPasswordText": "Quên mật khẩu?",
+  "auth.loginButton": "Đăng Nhập",
+  "auth.noAccount": "Chưa có tài khoản?",
+  "auth.register": "Đăng Ký"
+}

@@ -1,0 +1,8 @@
+{
+  "auth.forgotPassword": "Quên Mật Khẩu",
+  "auth.resetDescription": "Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn liên kết để đặt lại mật khẩu.",
+  "auth.email": "Email",
+  "auth.resetButton": "Đặt Lại Mật Khẩu",
+  "auth.backToLogin": "Quay Lại Đăng Nhập",
+  "auth.emailSent": "Kiểm tra email của bạn để có liên kết đặt lại"
+}

@@ -13,7 +13,7 @@ interface LanguageContextType {
   messages: Record<string, string>;
 }
 
-const messages = {
+const coreMessages = {
   en: enMessages,
   vi: viMessages,
 };
@@ -31,13 +31,24 @@ export const useLanguage = () => {
 interface LanguageProviderProps {
   children: React.ReactNode;
   storageKey?: string; // Allow customization of localStorage key
+  additionalMessages?: {
+    en?: Record<string, string>;
+    vi?: Record<string, string>;
+  };
 }
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   children,
   storageKey = 'app-locale', // Default storage key
+  additionalMessages = {},
 }) => {
   const [locale, setLocaleState] = useState<SupportedLocale>('en');
+
+  // Merge core messages with additional messages from libraries
+  const mergedMessages = {
+    en: { ...coreMessages.en, ...additionalMessages.en },
+    vi: { ...coreMessages.vi, ...additionalMessages.vi },
+  };
 
   // Load saved locale from localStorage on component mount
   useEffect(() => {
@@ -55,12 +66,12 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   const contextValue: LanguageContextType = {
     locale,
     setLocale,
-    messages: messages[locale],
+    messages: mergedMessages[locale],
   };
 
   return (
     <LanguageContext.Provider value={contextValue}>
-      <IntlProvider locale={locale} messages={messages[locale]}>
+      <IntlProvider locale={locale} messages={mergedMessages[locale]}>
         {children}
       </IntlProvider>
     </LanguageContext.Provider>

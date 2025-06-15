@@ -1,0 +1,8 @@
+{
+  "auth.forgotPassword": "Forgot Password",
+  "auth.resetDescription": "Enter your email address and we'll send you a link to reset your password.",
+  "auth.email": "Email",
+  "auth.resetButton": "Reset Password",
+  "auth.backToLogin": "Back to Login",
+  "auth.emailSent": "Check your email for a reset link"
+}

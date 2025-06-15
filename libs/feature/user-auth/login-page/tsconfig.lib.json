@@ -17,6 +17,6 @@
     "types": ["node"],
     "lib": ["dom", "dom.iterable", "esnext"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx", "src/**/*.json"],
   "references": []
 }

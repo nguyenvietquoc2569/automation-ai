@@ -1,0 +1,10 @@
+{
+  "auth.loginToAccount": "Log in to your account",
+  "auth.email": "Email",
+  "auth.password": "Password",
+  "auth.rememberMe": "Remember me",
+  "auth.forgotPasswordText": "Forgot your password?",
+  "auth.loginButton": "Log in",
+  "auth.noAccount": "Don't have an account?",
+  "auth.register": "Register"
+}
