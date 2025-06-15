@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { ForgotPasswordPage } from '@automation-ai/forget-page';
-import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { LanguageSwitcher } from '@automation-ai/multiple-lang';
 import Link from 'next/link';
 
 interface ForgotPasswordFormValues {

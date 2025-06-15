@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { LoginPage } from '@automation-ai/login-page';
-import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { LanguageSwitcher } from '@automation-ai/multiple-lang';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 

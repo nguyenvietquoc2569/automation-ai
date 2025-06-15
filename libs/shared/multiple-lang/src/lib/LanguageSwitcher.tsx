@@ -3,7 +3,7 @@
 import React from 'react';
 import { Select, Space } from 'antd';
 import { GlobalOutlined } from '@ant-design/icons';
-import { useLanguage, SupportedLocale } from '../contexts/LanguageContext';
+import { useLanguage, SupportedLocale } from './LanguageContext';
 import { useIntl } from 'react-intl';
 
 const { Option } = Select;

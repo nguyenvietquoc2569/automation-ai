@@ -14,7 +14,7 @@ import {
 import { useRouter } from 'next/navigation';
 import type { MenuProps } from 'antd';
 import { useIntl } from 'react-intl';
-import { LanguageSwitcher } from './LanguageSwitcher';
+import { LanguageSwitcher } from '@automation-ai/multiple-lang';
 
 const { Header, Content, Footer, Sider } = Layout;
 

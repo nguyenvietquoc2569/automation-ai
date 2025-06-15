@@ -30,24 +30,26 @@ export const useLanguage = () => {
 
 interface LanguageProviderProps {
   children: React.ReactNode;
+  storageKey?: string; // Allow customization of localStorage key
 }
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   children,
+  storageKey = 'app-locale', // Default storage key
 }) => {
   const [locale, setLocaleState] = useState<SupportedLocale>('en');
 
   // Load saved locale from localStorage on component mount
   useEffect(() => {
-    const savedLocale = localStorage.getItem('workforce-locale') as SupportedLocale;
+    const savedLocale = localStorage.getItem(storageKey) as SupportedLocale;
     if (savedLocale && (savedLocale === 'en' || savedLocale === 'vi')) {
       setLocaleState(savedLocale);
     }
-  }, []);
+  }, [storageKey]);
 
   const setLocale = (newLocale: SupportedLocale) => {
     setLocaleState(newLocale);
-    localStorage.setItem('workforce-locale', newLocale);
+    localStorage.setItem(storageKey, newLocale);
   };
 
   const contextValue: LanguageContextType = {

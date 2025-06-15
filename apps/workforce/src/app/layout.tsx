@@ -2,7 +2,7 @@ import React from 'react';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import '@ant-design/v5-patch-for-react-19';
 import './global.css';
-import { LanguageProvider } from './contexts/LanguageContext';
+import { LanguageProvider } from '@automation-ai/multiple-lang';
 
 export const metadata = {
   title: 'Workforce Dashboard',
@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body suppressHydrationWarning={true}>
         <AntdRegistry>
-          <LanguageProvider>{children}</LanguageProvider>
+          <LanguageProvider storageKey="workforce-locale">{children}</LanguageProvider>
         </AntdRegistry>
       </body>
     </html>
