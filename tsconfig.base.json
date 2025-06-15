@@ -18,7 +18,6 @@
     "target": "es2022",
     "customConditions": ["development"],
     "paths": {
-      "@automation-ai/db-models": ["libs/backend/db-models/src/index.ts"],
       "@automation-ai/forget-page": [
         "libs/feature/user-auth/forget-page/src/index.ts"
       ],
