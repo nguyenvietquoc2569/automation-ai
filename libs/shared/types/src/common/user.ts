@@ -1,16 +1,21 @@
 export interface IUser {
-  name: string,
-  username: string,
-  ename: string,
-  password: string,
-  emailid: string,
-  permissions: Array<string>,
-  active: boolean,
-  title?: string,
-  avatar?: string,
+  id?: string;
+  name: string;
+  username: string;
+  ename: string;
+  password: string;
+  emailid: string;
+  permissions: Array<string>;
+  active: boolean;
+  title?: string;
+  avatar?: string;
+  organizations?: Array<string>; // Array of organization IDs user belongs to
+  currentOrgId?: string; // Currently active organization
   metaData?: {
-    [key: string]: any} // eslint-disable-line @typescript-eslint/no-explicit-any
-  createdAt?: Date,
+    [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  };
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export const defaultStaffUser: IUser = {
@@ -21,5 +26,7 @@ export const defaultStaffUser: IUser = {
   emailid: '',
   permissions: [],
   active: true,
-  createdAt: new Date()
-}
+  organizations: [],
+  createdAt: new Date(),
+  updatedAt: new Date()
+};
