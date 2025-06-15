@@ -16,9 +16,6 @@
       "path": "./libs/feature/user-auth/forget-page"
     },
     {
-      "path": "./libs/backend/db-models"
-    },
-    {
       "path": "./libs/shared/types"
     },
     {
@@ -29,6 +26,9 @@
     },
     {
       "path": "./libs/feature/user-auth/services"
+    },
+    {
+      "path": "./libs/database"
     }
   ]
 }

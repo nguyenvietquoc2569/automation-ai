@@ -6,9 +6,9 @@ import {
   Organization, 
   Service, 
   Agent, 
-  AgentStatus,
-  ServiceCategory 
+  AgentStatus
 } from './models';
+import { ServiceCategory } from '@automation-ai/types';
 
 /**
  * Example usage of the database library

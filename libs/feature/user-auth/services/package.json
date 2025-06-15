@@ -10,5 +10,9 @@
       "default": "./src/index.ts"
     },
     "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@automation-ai/database": "*",
+    "@automation-ai/types": "*"
   }
 }

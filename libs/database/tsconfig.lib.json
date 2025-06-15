@@ -25,5 +25,16 @@
     "src/**/*.spec.jsx",
     "src/**/*.test.jsx"
   ],
-  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx", "../../libs/shared/types/src/**/*.ts"]
+  "include": [
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "../../libs/shared/types/src/**/*.ts"
+  ],
+  "references": [
+    {
+      "path": "../shared/types/tsconfig.lib.json"
+    }
+  ]
 }
