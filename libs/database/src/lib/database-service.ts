@@ -1,5 +1,5 @@
 import { dbConnection } from './connection';
-import { User, Organization, Service, Agent } from './models/index'
+import { User, Organization, Service, Agent, Session } from './models/index';
 
 export class DatabaseService {
   private static instance: DatabaseService;
@@ -56,7 +56,8 @@ export class DatabaseService {
       User,
       Organization,
       Service,
-      Agent
+      Agent,
+      Session
     };
   }
 
@@ -74,7 +75,8 @@ export class DatabaseService {
         User.createIndexes(),
         Organization.createIndexes(),
         Service.createIndexes(),
-        Agent.createIndexes()
+        Agent.createIndexes(),
+        Session.createIndexes()
       ]);
       console.log('Database indexes created successfully');
     } catch (error) {
@@ -159,7 +161,8 @@ export class DatabaseService {
         User.countDocuments(),
         Organization.countDocuments(),
         Service.countDocuments(),
-        Agent.countDocuments()
+        Agent.countDocuments(),
+        Session.countDocuments()
       ]);
 
       return {
@@ -170,7 +173,8 @@ export class DatabaseService {
             users: stats[0],
             organizations: stats[1],
             services: stats[2],
-            agents: stats[3]
+            agents: stats[3],
+            sessions: stats[4]
           }
         }
       };

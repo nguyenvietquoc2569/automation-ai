@@ -7,9 +7,11 @@
   "dependencies": {
     "@ant-design/nextjs-registry": "1.0.2",
     "@ant-design/v5-patch-for-react-19": "1.0.3",
+    "@types/jsonwebtoken": "9.0.9",
     "@types/mongoose": "5.11.97",
     "bcrypt": "6.0.0",
     "dotenv": "16.5.0",
+    "jsonwebtoken": "9.0.2",
     "mongoose": "8.15.2",
     "next": "~15.2.4",
     "react": "19.0.0",

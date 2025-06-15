@@ -125,6 +125,9 @@ userSchema.pre('save', async function(this: IUserDocument, next) {
 // Instance method to compare password
 userSchema.methods.comparePassword = async function(this: IUserDocument, candidatePassword: string): Promise<boolean> {
   try {
+    if (!candidatePassword || !this.password) {
+      throw new Error('Password data is required for comparison');
+    }
     return await bcrypt.compare(candidatePassword, this.password);
   } catch (error) {
     throw new Error(`Password comparison failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
