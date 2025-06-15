@@ -26,6 +26,7 @@
     "@swc/cli": "~0.6.0",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
+    "@types/node": "18.16.9",
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0",
     "eslint": "^9.8.0",
@@ -43,6 +44,7 @@
     "typescript-eslint": "^8.29.0"
   },
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "libs/shared/*"
   ]
 }
