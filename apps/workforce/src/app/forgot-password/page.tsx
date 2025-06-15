@@ -7,6 +7,8 @@ import {
   ArrowLeftOutlined,
 } from '@ant-design/icons';
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
+import { LanguageSwitcher } from '../components/LanguageSwitcher';
 
 const { Title, Text } = Typography;
 
@@ -18,6 +20,7 @@ export default function ForgotPasswordPage() {
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
   const [emailSent, setEmailSent] = React.useState(false);
+  const intl = useIntl();
 
   const onFinish = async (values: ForgotPasswordFormValues) => {
     setLoading(true);
@@ -46,8 +49,19 @@ export default function ForgotPasswordPage() {
           justifyContent: 'center',
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           padding: '20px',
+          position: 'relative',
         }}
       >
+        <div
+          style={{
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+          }}
+        >
+          <LanguageSwitcher style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '8px', borderRadius: '6px' }} />
+        </div>
+        
         <Card
           style={{
             width: '100%',
@@ -57,11 +71,11 @@ export default function ForgotPasswordPage() {
         >
           <Result
             status="success"
-            title="Email Sent!"
-            subTitle="We've sent a password reset link to your email address. Please check your inbox and follow the instructions."
+            title={intl.formatMessage({ id: 'auth.emailSent' })}
+            subTitle={intl.formatMessage({ id: 'auth.resetDescription' })}
             extra={[
               <Link key="login" href="/login">
-                <Button type="primary">Back to Login</Button>
+                <Button type="primary">{intl.formatMessage({ id: 'auth.backToLogin' })}</Button>
               </Link>,
             ]}
           />
@@ -79,8 +93,19 @@ export default function ForgotPasswordPage() {
         justifyContent: 'center',
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         padding: '20px',
+        position: 'relative',
       }}
     >
+      <div
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+        }}
+      >
+        <LanguageSwitcher style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '8px', borderRadius: '6px' }} />
+      </div>
+      
       <Card
         style={{
           width: '100%',
@@ -98,11 +123,10 @@ export default function ForgotPasswordPage() {
               }}
             />
             <Title level={2} style={{ margin: 0 }}>
-              Forgot Password?
+              {intl.formatMessage({ id: 'auth.forgotPassword' })}
             </Title>
             <Text type="secondary">
-              Enter your email address and we&apos;ll send you a link to reset
-              your password.
+              {intl.formatMessage({ id: 'auth.resetDescription' })}
             </Text>
           </div>
 
@@ -115,7 +139,7 @@ export default function ForgotPasswordPage() {
           >
             <Form.Item
               name="email"
-              label="Email Address"
+              label={intl.formatMessage({ id: 'auth.email' })}
               rules={[
                 { required: true, message: 'Please input your email!' },
                 { type: 'email', message: 'Please enter a valid email!' },
@@ -123,7 +147,7 @@ export default function ForgotPasswordPage() {
             >
               <Input
                 prefix={<MailOutlined />}
-                placeholder="Enter your email address"
+                placeholder={intl.formatMessage({ id: 'auth.email' })}
               />
             </Form.Item>
 
@@ -135,7 +159,7 @@ export default function ForgotPasswordPage() {
                 block
                 style={{ height: '40px' }}
               >
-                Send Reset Link
+                {intl.formatMessage({ id: 'auth.resetButton' })}
               </Button>
             </Form.Item>
           </Form>
@@ -151,7 +175,7 @@ export default function ForgotPasswordPage() {
               }}
             >
               <ArrowLeftOutlined />
-              Back to Login
+              {intl.formatMessage({ id: 'auth.backToLogin' })}
             </Link>
           </div>
         </Space>

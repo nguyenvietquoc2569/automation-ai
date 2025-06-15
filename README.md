@@ -1,34 +1,48 @@
-# AutomationAi
+# Workforce Management Platform
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+A comprehensive workforce management platform built with Next.js, Ant Design, and Nx workspace.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/next?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Features
 
-## Finish your remote caching setup
+- 🏢 **Modern Dashboard**: Built with Ant Design 5.0 for a professional UI/UX
+- 🔐 **Authentication System**: Complete login, register, and forgot password functionality  
+- 🌍 **Multi-Language Support**: Vietnamese and English with React Intl
+- 📱 **Responsive Design**: Mobile-first approach with Ant Design's responsive components
+- ⚡ **High Performance**: Next.js 15 with React 19 for optimal performance
+- 🎨 **Consistent Branding**: Workforce automation theme throughout
+- 🔧 **Developer Experience**: TypeScript, ESLint, Prettier, and Nx monorepo tools
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/XmpfRFuEB5)
+## Quick Start
 
-
-## Run tasks
-
-To run the dev server for your app, use:
+### Run Development Server
 
 ```sh
-npx nx dev automation-market
+npx nx dev workforce
 ```
 
-To create a production bundle:
+### Build for Production
 
 ```sh
-npx nx build automation-market
+npx nx build workforce
 ```
 
-To see all available targets to run for a project, run:
+### View Project Details
 
 ```sh
-npx nx show project automation-market
+npx nx show project workforce
+```
+
+## Multi-Language Support
+
+The application supports Vietnamese (vi) and English (en) languages. See [MULTILINGUAL_DOCUMENTATION.md](./MULTILINGUAL_DOCUMENTATION.md) for detailed implementation guide.
+
+### Key Features:
+- Language switcher in all pages
+- Persistent language selection
+- Complete translations for all UI elements
+- Easy to add new languages
 ```
 
 These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.

@@ -13,6 +13,8 @@ import {
 } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import type { MenuProps } from 'antd';
+import { useIntl } from 'react-intl';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -32,21 +34,6 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuItem[] = [
-  getItem('Dashboard', '1', <PieChartOutlined />),
-  getItem('Automation', '2', <DesktopOutlined />),
-  getItem('Users', 'sub1', <UserOutlined />, [
-    getItem('Manage Users', '3'),
-    getItem('User Analytics', '4'),
-    getItem('User Settings', '5'),
-  ]),
-  getItem('Teams', 'sub2', <TeamOutlined />, [
-    getItem('Team Management', '6'),
-    getItem('Team Analytics', '8'),
-  ]),
-  getItem('Files', '9', <FileOutlined />),
-];
-
 interface AntdLayoutProps {
   children: React.ReactNode;
 }
@@ -54,9 +41,25 @@ interface AntdLayoutProps {
 export default function AntdLayout({ children }: AntdLayoutProps) {
   const [collapsed, setCollapsed] = React.useState(false);
   const router = useRouter();
+  const intl = useIntl();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const items: MenuItem[] = [
+    getItem(intl.formatMessage({ id: 'nav.dashboard' }), '1', <PieChartOutlined />),
+    getItem('Automation', '2', <DesktopOutlined />),
+    getItem(intl.formatMessage({ id: 'nav.users' }), 'sub1', <UserOutlined />, [
+      getItem('Manage Users', '3'),
+      getItem('User Analytics', '4'),
+      getItem('User Settings', '5'),
+    ]),
+    getItem('Teams', 'sub2', <TeamOutlined />, [
+      getItem('Team Management', '6'),
+      getItem('Team Analytics', '8'),
+    ]),
+    getItem('Files', '9', <FileOutlined />),
+  ];
 
   const handleLogout = () => {
     // TODO: Implement actual logout logic (clear tokens, etc.)
@@ -72,7 +75,7 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
     {
       key: 'settings',
       icon: <SettingOutlined />,
-      label: 'Settings',
+      label: intl.formatMessage({ id: 'nav.settings' }),
     },
     {
       type: 'divider' as const,
@@ -80,7 +83,7 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
     {
       key: 'logout',
       icon: <LogoutOutlined />,
-      label: 'Logout',
+      label: intl.formatMessage({ id: 'nav.logout' }),
       onClick: handleLogout,
     },
   ];
@@ -144,9 +147,10 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
           <div
             style={{ padding: '0 24px', fontSize: '18px', fontWeight: 'bold' }}
           >
-            Workforce Dashboard
+            {intl.formatMessage({ id: 'app.title' })}
           </div>
-          <div style={{ padding: '0 24px' }}>
+          <div style={{ padding: '0 24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <LanguageSwitcher />
             <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
               <Space style={{ cursor: 'pointer' }}>
                 <Avatar icon={<UserOutlined />} />
@@ -158,7 +162,10 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
         <Content style={{ margin: '0 16px' }}>
           <Breadcrumb
             style={{ margin: '16px 0' }}
-            items={[{ title: 'User' }, { title: 'Dashboard' }]}
+            items={[
+              { title: intl.formatMessage({ id: 'nav.users' }) }, 
+              { title: intl.formatMessage({ id: 'nav.dashboard' }) }
+            ]}
           />
           <div
             style={{
@@ -172,7 +179,7 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Workforce ©2025 Created with Ant Design
+          {intl.formatMessage({ id: 'app.footer' })}
         </Footer>
       </Layout>
     </Layout>

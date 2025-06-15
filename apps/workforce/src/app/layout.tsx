@@ -2,6 +2,7 @@ import React from 'react';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import '@ant-design/v5-patch-for-react-19';
 import './global.css';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 export const metadata = {
   title: 'Workforce Dashboard',
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <AntdRegistry>{children}</AntdRegistry>
+        <AntdRegistry>
+          <LanguageProvider>{children}</LanguageProvider>
+        </AntdRegistry>
       </body>
     </html>
   );
