@@ -1,27 +1,9 @@
 'use client';
 import React from 'react';
-import {
-  Form,
-  Input,
-  Button,
-  Card,
-  Typography,
-  Space,
-  Divider,
-  Checkbox,
-} from 'antd';
-import {
-  LockOutlined,
-  MailOutlined,
-  RobotOutlined,
-  GoogleOutlined,
-  FacebookOutlined,
-} from '@ant-design/icons';
-import Link from 'next/link';
-import { useIntl } from 'react-intl';
+import { RegisterPage } from '@automation-ai/user-register-page';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
-
-const { Title, Text } = Typography;
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface RegisterFormValues {
   firstName: string;
@@ -32,215 +14,33 @@ interface RegisterFormValues {
   terms: boolean;
 }
 
-export default function RegisterPage() {
-  const [form] = Form.useForm();
-  const [loading, setLoading] = React.useState(false);
-  const intl = useIntl();
+export default function RegisterPageWrapper() {
+  const router = useRouter();
 
-  const onFinish = async (values: RegisterFormValues) => {
-    setLoading(true);
+  const handleRegister = async (values: RegisterFormValues) => {
     try {
-      // TODO: Implement actual registration logic
+      // TODO: Implement actual registration logic with your authentication service
       console.log('Registration attempt:', values);
 
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // TODO: Handle successful registration
+      // TODO: Handle successful registration (store token, redirect, etc.)
+      // For now, redirect to login or dashboard
       alert('Registration successful!');
+      router.push('/login');
+      
     } catch (error) {
       console.error('Registration failed:', error);
-    } finally {
-      setLoading(false);
+      throw error; // Re-throw to let the RegisterPage component handle the error display
     }
   };
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        padding: '20px',
-        position: 'relative',
-      }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          top: '20px',
-          right: '20px',
-        }}
-      >
-        <LanguageSwitcher style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '8px', borderRadius: '6px' }} />
-      </div>
-      
-      <Card
-        style={{
-          width: '100%',
-          maxWidth: 450,
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-        }}
-      >
-        <Space direction="vertical" size="large" style={{ width: '100%' }}>
-          <div style={{ textAlign: 'center' }}>
-            <RobotOutlined
-              style={{
-                fontSize: '48px',
-                color: '#1890ff',
-                marginBottom: '16px',
-              }}
-            />
-            <Title level={2} style={{ margin: 0 }}>
-              {intl.formatMessage({ id: 'auth.createAccount' })}
-            </Title>
-            <Text type="secondary">Join Workforce Dashboard</Text>
-          </div>
-
-          <Form
-            form={form}
-            name="register"
-            onFinish={onFinish}
-            layout="vertical"
-            size="large"
-          >
-            <Space direction="horizontal" style={{ width: '100%' }}>
-              <Form.Item
-                name="firstName"
-                label="First Name"
-                rules={[
-                  { required: true, message: 'Please input your first name!' },
-                ]}
-                style={{ flex: 1 }}
-              >
-                <Input placeholder="First name" />
-              </Form.Item>
-
-              <Form.Item
-                name="lastName"
-                label="Last Name"
-                rules={[
-                  { required: true, message: 'Please input your last name!' },
-                ]}
-                style={{ flex: 1 }}
-              >
-                <Input placeholder="Last name" />
-              </Form.Item>
-            </Space>
-
-            <Form.Item
-              name="email"
-              label={intl.formatMessage({ id: 'auth.email' })}
-              rules={[
-                { required: true, message: 'Please input your email!' },
-                { type: 'email', message: 'Please enter a valid email!' },
-              ]}
-            >
-              <Input prefix={<MailOutlined />} placeholder={intl.formatMessage({ id: 'auth.email' })} />
-            </Form.Item>
-
-            <Form.Item
-              name="password"
-              label={intl.formatMessage({ id: 'auth.password' })}
-              rules={[
-                { required: true, message: 'Please input your password!' },
-                { min: 8, message: 'Password must be at least 8 characters!' },
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined />}
-                placeholder="Create password"
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="confirmPassword"
-              label="Confirm Password"
-              dependencies={['password']}
-              rules={[
-                { required: true, message: 'Please confirm your password!' },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('password') === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(new Error('Passwords do not match!'));
-                  },
-                }),
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined />}
-                placeholder="Confirm password"
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="terms"
-              valuePropName="checked"
-              rules={[
-                {
-                  validator: (_, value) =>
-                    value
-                      ? Promise.resolve()
-                      : Promise.reject(
-                          new Error('Please accept the terms and conditions!')
-                        ),
-                },
-              ]}
-            >
-              <Checkbox>
-                I agree to the{' '}
-                <Link href="/terms" style={{ color: '#1890ff' }}>
-                  Terms of Service
-                </Link>{' '}
-                and{' '}
-                <Link href="/privacy" style={{ color: '#1890ff' }}>
-                  Privacy Policy
-                </Link>
-              </Checkbox>
-            </Form.Item>
-
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={loading}
-                block
-                style={{ height: '40px' }}
-              >
-                Create Account
-              </Button>
-            </Form.Item>
-          </Form>
-
-          <Divider>Or continue with</Divider>
-
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Button icon={<GoogleOutlined />} block style={{ height: '40px' }}>
-              Continue with Google
-            </Button>
-            <Button
-              icon={<FacebookOutlined />}
-              block
-              style={{ height: '40px' }}
-            >
-              Continue with Facebook
-            </Button>
-          </Space>
-
-          <div style={{ textAlign: 'center' }}>
-            <Text type="secondary">
-              Already have an account?{' '}
-              <Link href="/login" style={{ color: '#1890ff' }}>
-                Sign in
-              </Link>
-            </Text>
-          </div>
-        </Space>
-      </Card>
-    </div>
+    <RegisterPage 
+      LanguageSwitcher={LanguageSwitcher}
+      onRegister={handleRegister}
+      LinkComponent={Link}
+    />
   );
 }

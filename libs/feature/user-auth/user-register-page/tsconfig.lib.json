@@ -6,11 +6,17 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
     "emitDeclarationOnly": false,
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "composite": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "forceConsistentCasingInFileNames": true,
-    "types": ["node"]
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "types": ["node"],
+    "lib": ["dom", "dom.iterable", "esnext"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
   "references": []
 }
