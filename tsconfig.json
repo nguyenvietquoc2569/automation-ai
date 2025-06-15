@@ -8,6 +8,15 @@
     },
     {
       "path": "./libs/shared/multiple-lang"
+    },
+    {
+      "path": "./libs/feature/user-auth/login-page"
+    },
+    {
+      "path": "./libs/feature/user-auth/user-register-page"
+    },
+    {
+      "path": "./libs/feature/user-auth/forget-page"
     }
   ]
 }

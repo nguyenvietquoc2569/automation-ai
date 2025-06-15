@@ -45,6 +45,7 @@
   },
   "workspaces": [
     "apps/*",
-    "libs/shared/*"
+    "libs/shared/*",
+    "libs/feature/user-auth/*"
   ]
 }
