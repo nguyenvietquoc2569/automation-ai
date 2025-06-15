@@ -92,7 +92,7 @@ export async function registerUserWithService(registrationData: RegistrationData
     return {
       user: user.toJSON() as IUser,
       organization: organization.toJSON() as IOrg,
-      service: service.toJSON() as IService
+      service: service.toJSON() as unknown as IService
     };
 
   } catch (error) {
@@ -148,7 +148,8 @@ export async function registerServiceForUser(
         }
       });
 
-      // Update user's organizations
+      // Update user's organizations  
+      user.organizations = user.organizations || [];
       if (!user.organizations.includes(organization.id)) {
         user.organizations.push(organization.id);
         if (!user.currentOrgId) {
@@ -169,7 +170,7 @@ export async function registerServiceForUser(
 
     return {
       organization: organization.toJSON() as IOrg,
-      service: service.toJSON() as IService
+      service: service.toJSON() as unknown as IService
     };
 
   } catch (error) {
@@ -218,6 +219,7 @@ export async function getOrCreatePersonalOrg(userEmail: string): Promise<IOrg> {
       });
 
       // Update user's organizations
+      user.organizations = user.organizations || [];
       if (!user.organizations.includes(organization.id)) {
         user.organizations.push(organization.id);
         if (!user.currentOrgId) {

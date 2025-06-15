@@ -1,7 +1,31 @@
 {
-  "name": "database",
+  "name": "@automation-ai/database",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/database/src",
   "projectType": "library",
-  "tags": ["scope:libs", "type:data"]
+  "tags": ["scope:libs", "type:data"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/database",
+        "tsConfig": "libs/database/tsconfig.lib.json",
+        "packageJson": "libs/database/package.json",
+        "main": "libs/database/src/index.ts",
+        "assets": []
+      }
+    },
+    "build-deps": {
+      "executor": "nx:noop",
+      "dependsOn": ["^build"]
+    },
+    "watch-deps": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx nx watch --projects @automation-ai/database --includeDependentProjects -- npx nx build-deps @automation-ai/database"
+      },
+      "dependsOn": ["build-deps"]
+    }
+  }
 }

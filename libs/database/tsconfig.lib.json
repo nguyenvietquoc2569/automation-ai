@@ -1,16 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": "../../",
     "outDir": "dist",
-    "types": [
-      "node",
-      "@nx/react/typings/cssmodule.d.ts",
-      "@nx/react/typings/image.d.ts"
-    ],
-    "jsx": "react-jsx",
-    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
-    "rootDir": "../../"
+    "types": ["node"],
+    "rootDir": "src",
+    "declaration": true,
+    "declarationMap": true,
+    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo"
   },
   "exclude": [
     "out-tsc",
@@ -25,13 +21,7 @@
     "src/**/*.spec.jsx",
     "src/**/*.test.jsx"
   ],
-  "include": [
-    "src/**/*.js",
-    "src/**/*.jsx",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "../../libs/shared/types/src/**/*.ts"
-  ],
+  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [
     {
       "path": "../shared/types/tsconfig.lib.json"

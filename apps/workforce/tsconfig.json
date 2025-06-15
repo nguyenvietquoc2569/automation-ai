@@ -18,10 +18,18 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@automation-ai/login-page": ["../../libs/feature/user-auth/login-page/src/index.ts"],
-      "@automation-ai/user-register-page": ["../../libs/feature/user-auth/user-register-page/src/index.ts"],
-      "@automation-ai/forget-page": ["../../libs/feature/user-auth/forget-page/src/index.ts"],
-      "@automation-ai/multiple-lang": ["../../libs/shared/multiple-lang/src/index.ts"]
+      "@automation-ai/login-page": [
+        "../../libs/feature/user-auth/login-page/src/index.ts"
+      ],
+      "@automation-ai/user-register-page": [
+        "../../libs/feature/user-auth/user-register-page/src/index.ts"
+      ],
+      "@automation-ai/forget-page": [
+        "../../libs/feature/user-auth/forget-page/src/index.ts"
+      ],
+      "@automation-ai/multiple-lang": [
+        "../../libs/shared/multiple-lang/src/index.ts"
+      ]
     },
     "outDir": "dist",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
@@ -39,9 +47,6 @@
   ],
   "references": [
     {
-      "path": "../../libs/feature/user-auth/login-page"
-    },
-    {
       "path": "../../libs/feature/user-auth/user-register-page"
     },
     {
@@ -49,6 +54,15 @@
     },
     {
       "path": "../../libs/shared/multiple-lang"
+    },
+    {
+      "path": "../../libs/database"
+    },
+    {
+      "path": "../../libs/feature/user-auth/services"
+    },
+    {
+      "path": "../../libs/feature/user-auth/login-page"
     }
   ],
   "exclude": [
