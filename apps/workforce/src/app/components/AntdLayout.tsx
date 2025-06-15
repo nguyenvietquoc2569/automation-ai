@@ -119,12 +119,11 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
                 fontSize: '12px',
                 fontWeight: 'bold',
                 textAlign: 'center',
-              }}
-            >
-              Automation Market
-            </div>
-          )}
-        </div>
+              }}              >
+                Workforce
+              </div>
+            )}
+          </div>
         <Menu
           theme="dark"
           defaultSelectedKeys={['1']}
@@ -145,7 +144,7 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
           <div
             style={{ padding: '0 24px', fontSize: '18px', fontWeight: 'bold' }}
           >
-            Automation Market Dashboard
+            Workforce Dashboard
           </div>
           <div style={{ padding: '0 24px' }}>
             <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
@@ -173,7 +172,7 @@ export default function AntdLayout({ children }: AntdLayoutProps) {
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Automation Market ©{new Date().getFullYear()} Created with Ant Design
+          Workforce ©2025 Created with Ant Design
         </Footer>
       </Layout>
     </Layout>

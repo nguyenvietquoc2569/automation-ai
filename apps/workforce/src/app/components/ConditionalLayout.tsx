@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import AntdLayout from './AntdLayout';
 
@@ -13,6 +13,16 @@ export default function ConditionalLayout({
   children,
 }: ConditionalLayoutProps) {
   const pathname = usePathname();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Prevent hydration mismatch by rendering a consistent initial state
+  if (!isClient) {
+    return <>{children}</>;
+  }
 
   // Check if current page is an authentication page
   const isAuthPage = authPages.includes(pathname);

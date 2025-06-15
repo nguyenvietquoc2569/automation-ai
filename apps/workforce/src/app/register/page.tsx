@@ -82,7 +82,7 @@ export default function RegisterPage() {
             <Title level={2} style={{ margin: 0 }}>
               Create Account
             </Title>
-            <Text type="secondary">Join Automation Market Dashboard</Text>
+            <Text type="secondary">Join Workforce Dashboard</Text>
           </div>
 
           <Form

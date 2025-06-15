@@ -4,9 +4,9 @@ import '@ant-design/v5-patch-for-react-19';
 import './global.css';
 
 export const metadata = {
-  title: 'Automation Market Dashboard',
+  title: 'Workforce Dashboard',
   description:
-    'Comprehensive automation marketplace built with Next.js and Ant Design',
+    'Comprehensive workforce management platform built with Next.js and Ant Design',
 };
 
 export default function RootLayout({
@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning={true}>
         <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>

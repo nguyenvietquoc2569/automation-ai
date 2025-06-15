@@ -4,8 +4,8 @@ import '@ant-design/v5-patch-for-react-19';
 import '../global.css';
 
 export const metadata = {
-  title: 'Register - Automation Market Dashboard',
-  description: 'Create your automation marketplace account',
+  title: 'Register - Workforce Dashboard',
+  description: 'Create your workforce platform account',
 };
 
 export default function RegisterLayout({
@@ -15,7 +15,7 @@ export default function RegisterLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning={true}>
         <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>

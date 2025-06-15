@@ -4,8 +4,8 @@ import '@ant-design/v5-patch-for-react-19';
 import '../global.css';
 
 export const metadata = {
-  title: 'Forgot Password - Automation Market Dashboard',
-  description: 'Reset your automation marketplace password',
+  title: 'Forgot Password - Workforce Dashboard',
+  description: 'Reset your workforce platform password',
 };
 
 export default function ForgotPasswordLayout({
@@ -15,7 +15,7 @@ export default function ForgotPasswordLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning={true}>
         <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>

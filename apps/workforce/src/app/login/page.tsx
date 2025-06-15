@@ -77,7 +77,7 @@ export default function LoginPage() {
               }}
             />
             <Title level={2} style={{ margin: 0 }}>
-              Automation Market
+              Workforce
             </Title>
             <Text type="secondary">Sign in to your dashboard</Text>
           </div>

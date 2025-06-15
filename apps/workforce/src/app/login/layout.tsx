@@ -4,8 +4,8 @@ import '@ant-design/v5-patch-for-react-19';
 import '../global.css';
 
 export const metadata = {
-  title: 'Login - Automation Market Dashboard',
-  description: 'Sign in to your automation marketplace',
+  title: 'Login - Workforce Dashboard',
+  description: 'Sign in to your workforce platform',
 };
 
 export default function LoginLayout({
@@ -15,7 +15,7 @@ export default function LoginLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning={true}>
         <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>
