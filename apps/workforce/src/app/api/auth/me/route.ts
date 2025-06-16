@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/auth/me/refresh
- * Refresh session token
+ * Refresh session token - Fixed JSON parsing issue
  */
 export async function POST(request: NextRequest) {
   try {
@@ -59,7 +59,19 @@ export async function POST(request: NextRequest) {
     const dbService = DatabaseService.getInstance();
     await dbService.initialize();
 
-    const body = await request.json();
+    console.log('Refreshing session token...');
+    
+    // Safely parse JSON body - handle empty body case
+    let body: { refreshToken?: string } = {};
+    try {
+      const text = await request.text();
+      if (text.trim()) {
+        body = JSON.parse(text);
+      }
+    } catch {
+      console.log('No JSON body provided, using cookies for refresh token');
+    }
+
     const refreshToken = body.refreshToken || request.cookies.get('refreshToken')?.value;
 
     if (!refreshToken) {
