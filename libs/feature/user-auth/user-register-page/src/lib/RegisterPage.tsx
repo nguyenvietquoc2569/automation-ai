@@ -42,10 +42,33 @@ export function RegisterPage({ LanguageSwitcher, onRegister, LinkComponent, load
   const [form] = Form.useForm();
   const [internalLoading, setInternalLoading] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [mounted, setMounted] = React.useState(false);
   const intl = useIntl();
+
+  // Handle hydration
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Use external loading if provided, otherwise use internal loading
   const loading = externalLoading !== undefined ? externalLoading : internalLoading;
+
+  // Don't render until mounted to prevent hydration issues
+  if (!mounted) {
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ color: 'white' }}>Loading...</div>
+      </div>
+    );
+  }
 
   const handleFinish = async (values: RegisterFormValues) => {
     // Clear previous error message

@@ -11,8 +11,16 @@ export default function DashboardPage() {
   const router = useRouter();
   const [session, setSession] = useState<UserSession | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  // Handle hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
+    if (!mounted) return; // Don't run auth check until component is mounted
+    
     // Check if user is logged in
     const checkAuth = async () => {
       try {
@@ -32,7 +40,7 @@ export default function DashboardPage() {
     };
 
     checkAuth();
-  }, [router]);
+  }, [router, mounted]);
 
   const handleLogout = async () => {
     try {
@@ -45,7 +53,7 @@ export default function DashboardPage() {
     }
   };
 
-  if (loading) {
+  if (!mounted || loading) {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>
         <Text>Loading...</Text>
