@@ -3,6 +3,7 @@ import { AntdRegistry } from '@ant-design/nextjs-registry';
 import '@ant-design/v5-patch-for-react-19';
 import './global.css';
 import { LanguageProvider } from '@automation-ai/multiple-lang';
+import { ClientSessionWrapper } from '../components/ClientSessionWrapper';
 import { loginPageLocales } from '@automation-ai/login-page';
 import { registerPageLocales } from '@automation-ai/user-register-page';
 import { forgetPageLocales } from '@automation-ai/forget-page';
@@ -40,7 +41,9 @@ export default function RootLayout({
             storageKey="workforce-locale"
             additionalMessages={additionalMessages}
           >
-            {children}
+            <ClientSessionWrapper loginPath="/login">
+              {children}
+            </ClientSessionWrapper>
           </LanguageProvider>
         </AntdRegistry>
       </body>

@@ -29,6 +29,9 @@
     },
     {
       "path": "./libs/database"
+    },
+    {
+      "path": "./libs/feature/fe-session-management"
     }
   ]
 }

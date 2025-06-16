@@ -14,10 +14,6 @@ export default function LoginLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body suppressHydrationWarning={true}>
-        <AntdRegistry>{children}</AntdRegistry>
-      </body>
-    </html>
+    <AntdRegistry>{children}</AntdRegistry>
   );
 }

@@ -9,7 +9,8 @@
     "react-dom": "19.0.0",
     "@automation-ai/login-page": "*",
     "@automation-ai/services": "*",
-    "@automation-ai/database": "*"
+    "@automation-ai/database": "*",
+    "@automation-ai/fe-session-management": "*"
   },
   "nx": {
     "name": "@automation-ai/workforce"

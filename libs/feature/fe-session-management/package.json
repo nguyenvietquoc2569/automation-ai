@@ -1,0 +1,31 @@
+{
+  "name": "@automation-ai/fe-session-management",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./server": {
+      "development": "./src/lib/server.ts",
+      "types": "./dist/lib/server.d.ts",
+      "import": "./dist/lib/server.js",
+      "default": "./dist/lib/server.js"
+    }
+  },
+  "nx": {
+    "name": "fe-session-management",
+    "tags": [
+      "npm:private",
+      "scope:feature",
+      "type:util"
+    ]
+  }
+}
