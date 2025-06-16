@@ -1,19 +1,9 @@
 'use client';
 import React, { useState } from 'react';
-import { RegisterPage, AuthAPI, RegisterFormData } from '@automation-ai/user-register-page';
+import { RegisterPage, AuthAPI, RegisterFormData, RegisterFormValues } from '@automation-ai/user-register-page';
 import { LanguageSwitcher } from '@automation-ai/multiple-lang';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ServiceCategory } from '@automation-ai/types';
-
-interface RegisterFormValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  terms: boolean;
-}
 
 export default function RegisterPageWrapper() {
   const router = useRouter();

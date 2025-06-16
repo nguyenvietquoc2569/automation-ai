@@ -21,7 +21,7 @@ import { useIntl } from 'react-intl';
 
 const { Title, Text } = Typography;
 
-interface RegisterFormValues {
+export interface RegisterFormValues {
   firstName: string;
   lastName: string;
   email: string;
@@ -34,15 +34,23 @@ interface RegisterPageProps {
   LanguageSwitcher?: React.ComponentType<{ style?: React.CSSProperties }>;
   onRegister?: (values: RegisterFormValues) => Promise<void>;
   LinkComponent?: React.ComponentType<{ href: string; children: React.ReactNode; style?: React.CSSProperties }>;
+  loading?: boolean;
 }
 
-export function RegisterPage({ LanguageSwitcher, onRegister, LinkComponent }: RegisterPageProps) {
+export function RegisterPage({ LanguageSwitcher, onRegister, LinkComponent, loading: externalLoading }: RegisterPageProps) {
   const [form] = Form.useForm();
-  const [loading, setLoading] = React.useState(false);
+  const [internalLoading, setInternalLoading] = React.useState(false);
   const intl = useIntl();
 
+  // Use external loading if provided, otherwise use internal loading
+  const loading = externalLoading !== undefined ? externalLoading : internalLoading;
+
   const handleFinish = async (values: RegisterFormValues) => {
-    setLoading(true);
+    // Only manage internal loading if external loading is not provided
+    if (externalLoading === undefined) {
+      setInternalLoading(true);
+    }
+    
     try {
       if (onRegister) {
         await onRegister(values);
@@ -55,7 +63,10 @@ export function RegisterPage({ LanguageSwitcher, onRegister, LinkComponent }: Re
     } catch (error) {
       console.error('Registration failed:', error);
     } finally {
-      setLoading(false);
+      // Only manage internal loading if external loading is not provided
+      if (externalLoading === undefined) {
+        setInternalLoading(false);
+      }
     }
   };
 
