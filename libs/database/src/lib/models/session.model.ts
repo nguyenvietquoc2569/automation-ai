@@ -41,7 +41,8 @@ const deviceInfoSchema = new Schema<IDeviceInfo>({
         // Basic IP validation (supports both IPv4 and IPv6)
         const ipv4Regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
         const ipv6Regex = /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
-        return !v || ipv4Regex.test(v) || ipv6Regex.test(v);
+        console.log('Validating IP:', v);
+        return !v || ipv4Regex.test(v) || ipv6Regex.test(v) || v === 'unknown' || v === '::1';
       },
       message: 'Invalid IP address format'
     }
@@ -91,8 +92,7 @@ const sessionSchema = new Schema<ISessionDocument>({
   sessionToken: {
     type: String,
     required: [true, 'Session token is required'],
-    unique: true,
-    index: true
+    unique: true
   },
   refreshToken: {
     type: String,
@@ -122,8 +122,7 @@ const sessionSchema = new Schema<ISessionDocument>({
   },
   expiresAt: {
     type: Date,
-    required: [true, 'Expiration date is required'],
-    index: true
+    required: [true, 'Expiration date is required']
   },
   lastAccessAt: {
     type: Date,
@@ -178,8 +177,7 @@ const sessionSchema = new Schema<ISessionDocument>({
   collection: 'sessions'
 });
 
-// Indexes for better performance
-sessionSchema.index({ sessionToken: 1 }, { unique: true });
+// Indexes for better performance (sessionToken unique index is automatically created by unique: true)
 sessionSchema.index({ userId: 1, status: 1 });
 sessionSchema.index({ userId: 1, currentOrgId: 1 });
 sessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 }); // TTL index for auto-cleanup

@@ -9,6 +9,7 @@ import {
   Space,
   Divider,
   Checkbox,
+  Alert,
 } from 'antd';
 import {
   UserOutlined,
@@ -18,41 +19,105 @@ import {
   FacebookOutlined,
 } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
+import { AuthAPI, LoginFormData, UserSession } from './auth-api';
 
 const { Title, Text } = Typography;
 
-interface LoginFormValues {
-  email: string;
+export interface LoginFormValues {
+  emailOrUsername: string;
   password: string;
-  remember: boolean;
+  rememberMe: boolean;
 }
 
 interface LoginPageProps {
   LanguageSwitcher?: React.ComponentType<{ style?: React.CSSProperties }>;
   onLogin?: (values: LoginFormValues) => Promise<void>;
+  onLoginSuccess?: (session: UserSession) => void;
   LinkComponent?: React.ComponentType<{ href: string; children: React.ReactNode; style?: React.CSSProperties }>;
+  loading?: boolean;
+  registerPath?: string;
+  forgotPasswordPath?: string;
 }
 
-export function LoginPage({ LanguageSwitcher, onLogin, LinkComponent }: LoginPageProps) {
+export function LoginPage({ 
+  LanguageSwitcher, 
+  onLogin, 
+  onLoginSuccess,
+  LinkComponent, 
+  loading: externalLoading,
+  registerPath = '/register',
+  forgotPasswordPath = '/forgot-password'
+}: LoginPageProps) {
   const [form] = Form.useForm();
-  const [loading, setLoading] = React.useState(false);
+  const [internalLoading, setInternalLoading] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const intl = useIntl();
 
+  // Use external loading if provided, otherwise use internal loading
+  const loading = externalLoading !== undefined ? externalLoading : internalLoading;
+
   const handleFinish = async (values: LoginFormValues) => {
-    setLoading(true);
+    // Clear previous error message
+    setErrorMessage(null);
+    
+    // Only manage internal loading if external loading is not provided
+    if (externalLoading === undefined) {
+      setInternalLoading(true);
+    }
+    
     try {
       if (onLogin) {
+        // Use custom onLogin handler if provided
         await onLogin(values);
       } else {
-        // Default behavior
-        console.log('Login attempt:', values);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        alert('Login successful!');
+        // Default login logic using AuthAPI
+        const isEmail = values.emailOrUsername.includes('@');
+        
+        const loginData: LoginFormData = {
+          password: values.password,
+          rememberMe: values.rememberMe,
+          ...(isEmail 
+            ? { emailid: values.emailOrUsername }
+            : { username: values.emailOrUsername }
+          )
+        };
+
+        const response = await AuthAPI.login(loginData);
+        
+        if (response.success && response.data) {
+          // Convert response to UserSession format
+          const session: UserSession = {
+            sessionToken: response.data.sessionToken,
+            user: response.data.user,
+            currentOrg: response.data.currentOrg,
+            availableOrgs: response.data.availableOrgs || [],
+            expiresAt: response.data.expiresAt,
+            permissions: response.data.permissions || [],
+            roles: response.data.roles || []
+          };
+          
+          if (onLoginSuccess) {
+            onLoginSuccess(session);
+          } else {
+            // Default behavior - redirect to dashboard
+            window.location.href = '/dashboard';
+          }
+        }
       }
     } catch (error) {
       console.error('Login failed:', error);
+      
+      // Set error message for display
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage('Login failed. Please try again.');
+      }
     } finally {
-      setLoading(false);
+      // Only manage internal loading if external loading is not provided
+      if (externalLoading === undefined) {
+        setInternalLoading(false);
+      }
     }
   };
 
@@ -120,15 +185,30 @@ export function LoginPage({ LanguageSwitcher, onLogin, LinkComponent }: LoginPag
             layout="vertical"
             size="large"
           >
+            {errorMessage && (
+              <Alert
+                message="Login Failed"
+                description={errorMessage}
+                type="error"
+                showIcon
+                closable
+                onClose={() => setErrorMessage(null)}
+                style={{ marginBottom: '16px' }}
+              />
+            )}
+
             <Form.Item
-              name="email"
-              label={intl.formatMessage({ id: 'auth.email' })}
+              name="emailOrUsername"
+              label="Email or Username"
               rules={[
-                { required: true, message: 'Please input your email!' },
-                { type: 'email', message: 'Please enter a valid email!' },
+                { required: true, message: 'Please input your email or username!' },
               ]}
             >
-              <Input prefix={<UserOutlined />} placeholder={intl.formatMessage({ id: 'auth.email' })} />
+              <Input 
+                prefix={<UserOutlined />} 
+                placeholder="Email or username"
+                autoComplete="username"
+              />
             </Form.Item>
 
             <Form.Item
@@ -136,12 +216,12 @@ export function LoginPage({ LanguageSwitcher, onLogin, LinkComponent }: LoginPag
               label={intl.formatMessage({ id: 'auth.password' })}
               rules={[
                 { required: true, message: 'Please input your password!' },
-                { min: 6, message: 'Password must be at least 6 characters!' },
               ]}
             >
               <Input.Password
                 prefix={<LockOutlined />}
                 placeholder={intl.formatMessage({ id: 'auth.password' })}
+                autoComplete="current-password"
               />
             </Form.Item>
 
@@ -153,11 +233,11 @@ export function LoginPage({ LanguageSwitcher, onLogin, LinkComponent }: LoginPag
                   alignItems: 'center',
                 }}
               >
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox>{intl.formatMessage({ id: 'auth.rememberMe' })}</Checkbox>
+                <Form.Item name="rememberMe" valuePropName="checked" noStyle>
+                  <Checkbox>Remember me</Checkbox>
                 </Form.Item>
-                <Link href="/forgot-password" style={{ color: '#1890ff' }}>
-                  {intl.formatMessage({ id: 'auth.forgotPasswordText' })}
+                <Link href={forgotPasswordPath} style={{ color: '#1890ff' }}>
+                  Forgot password?
                 </Link>
               </div>
             </Form.Item>
@@ -192,9 +272,9 @@ export function LoginPage({ LanguageSwitcher, onLogin, LinkComponent }: LoginPag
 
           <div style={{ textAlign: 'center' }}>
             <Text type="secondary">
-              {intl.formatMessage({ id: 'auth.noAccount' })}{' '}
-              <Link href="/register" style={{ color: '#1890ff' }}>
-                {intl.formatMessage({ id: 'auth.register' })}
+              Don't have an account?{' '}
+              <Link href={registerPath} style={{ color: '#1890ff', fontWeight: 500 }}>
+                Sign up
               </Link>
             </Text>
           </div>
