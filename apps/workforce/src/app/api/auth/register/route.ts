@@ -86,9 +86,9 @@ export async function POST(request: NextRequest) {
     
     // Handle specific error types
     if (error instanceof Error) {
-      if (error.message.includes('duplicate') || error.message.includes('unique')) {
+      if (error.message.includes('already exists') || error.message.includes('unique')) {
         return NextResponse.json(
-          { error: 'User with this email or username already exists' },
+          { error: 'User with this email already exists' },
           { status: 409 }
         );
       }

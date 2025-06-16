@@ -196,5 +196,7 @@ orgSchema.methods.upgradeSubscription = function(this: IOrgDocument, newPlan: st
   return this.save();
 };
 
-export const Organization = mongoose.model<IOrgDocument, IOrgModel>('Organization', orgSchema);
+// Export the model using the safe pattern to avoid overwrite errors
+const _model = () => mongoose.model<IOrgDocument, IOrgModel>('Organization', orgSchema);
+export const Organization = (mongoose.models.Organization || _model()) as ReturnType<typeof _model>;
 export default Organization;

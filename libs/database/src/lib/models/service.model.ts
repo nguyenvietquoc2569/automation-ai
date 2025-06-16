@@ -115,5 +115,7 @@ serviceSchema.methods.removeTag = function(this: IServiceDocument, tag: string) 
   return this.save();
 };
 
-export const Service = mongoose.model<IServiceDocument, IServiceModel>('Service', serviceSchema);
+// Export the model using the safe pattern to avoid overwrite errors
+const _model = () => mongoose.model<IServiceDocument, IServiceModel>('Service', serviceSchema);
+export const Service = (mongoose.models.Service || _model()) as ReturnType<typeof _model>;
 export default Service;

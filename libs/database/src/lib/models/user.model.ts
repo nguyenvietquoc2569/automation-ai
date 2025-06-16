@@ -162,5 +162,7 @@ userSchema.statics.countByPermission = function(permission: string) {
   return this.countDocuments({ permissions: permission });
 };
 
-export const User = mongoose.model<IUserDocument, IUserModel>('User', userSchema);
+// Export the model using the safe pattern to avoid overwrite errors
+const _model = () => mongoose.model<IUserDocument, IUserModel>('User', userSchema);
+export const User = (mongoose.models.User || _model()) as ReturnType<typeof _model>;
 export default User;

@@ -50,15 +50,26 @@ export default function RegisterPageWrapper() {
     } catch (error) {
       console.error('Registration failed:', error);
       
-      // Show user-friendly error message
+      // Show user-friendly error message based on the specific error from backend
       if (error instanceof Error) {
-        if (error.message.includes('already exists')) {
-          alert('An account with this email already exists. Please use a different email or try logging in.');
-        } else if (error.message.includes('Invalid email')) {
+        const errorMessage = error.message.toLowerCase();
+        
+        if (errorMessage.includes('username already exists') || errorMessage.includes('username') && errorMessage.includes('exists')) {
+          alert('A user with this username already exists. Please choose a different username.');
+        } else if (errorMessage.includes('email already exists') || errorMessage.includes('email') && errorMessage.includes('exists')) {
+          alert('A user with this email already exists. Please use a different email or try logging in.');
+        } else if (errorMessage.includes('invalid email')) {
           alert('Please enter a valid email address.');
-        } else if (error.message.includes('Password must be')) {
+        } else if (errorMessage.includes('password must be') || errorMessage.includes('password') && errorMessage.includes('8 characters')) {
           alert('Password must be at least 8 characters long.');
+        } else if (errorMessage.includes('passwords do not match')) {
+          alert('The passwords you entered do not match. Please check and try again.');
+        } else if (errorMessage.includes('terms')) {
+          alert('Please accept the terms of service to continue.');
+        } else if (errorMessage.includes('network error')) {
+          alert('Network error. Please check your connection and try again.');
         } else {
+          // Show the exact error message from the backend if it's user-friendly
           alert(`Registration failed: ${error.message}`);
         }
       } else {

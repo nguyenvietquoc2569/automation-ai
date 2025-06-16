@@ -9,6 +9,7 @@ import {
   Space,
   Divider,
   Checkbox,
+  Alert,
 } from 'antd';
 import {
   LockOutlined,
@@ -40,12 +41,16 @@ interface RegisterPageProps {
 export function RegisterPage({ LanguageSwitcher, onRegister, LinkComponent, loading: externalLoading }: RegisterPageProps) {
   const [form] = Form.useForm();
   const [internalLoading, setInternalLoading] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const intl = useIntl();
 
   // Use external loading if provided, otherwise use internal loading
   const loading = externalLoading !== undefined ? externalLoading : internalLoading;
 
   const handleFinish = async (values: RegisterFormValues) => {
+    // Clear previous error message
+    setErrorMessage(null);
+    
     // Only manage internal loading if external loading is not provided
     if (externalLoading === undefined) {
       setInternalLoading(true);
@@ -62,6 +67,13 @@ export function RegisterPage({ LanguageSwitcher, onRegister, LinkComponent, load
       }
     } catch (error) {
       console.error('Registration failed:', error);
+      
+      // Set error message for display
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage('Registration failed. Please try again.');
+      }
     } finally {
       // Only manage internal loading if external loading is not provided
       if (externalLoading === undefined) {
@@ -128,6 +140,18 @@ export function RegisterPage({ LanguageSwitcher, onRegister, LinkComponent, load
             layout="vertical"
             size="large"
           >
+            {errorMessage && (
+              <Alert
+                message="Registration Failed"
+                description={errorMessage}
+                type="error"
+                showIcon
+                closable
+                onClose={() => setErrorMessage(null)}
+                style={{ marginBottom: '16px' }}
+              />
+            )}
+            
             <Space direction="horizontal" style={{ width: '100%' }}>
               <Form.Item
                 name="firstName"

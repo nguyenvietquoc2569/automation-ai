@@ -328,6 +328,8 @@ sessionSchema.statics.validateToken = function(sessionToken: string) {
   });
 };
 
-export const Session = mongoose.model<ISessionDocument, ISessionModel>('Session', sessionSchema);
+// Export the model using the safe pattern to avoid overwrite errors
+const _model = () => mongoose.model<ISessionDocument, ISessionModel>('Session', sessionSchema);
+export const Session = (mongoose.models.Session || _model()) as ReturnType<typeof _model>;
 export { SessionStatus, SessionType, LoginMethod };
 export default Session;

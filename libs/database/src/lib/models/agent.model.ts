@@ -299,6 +299,8 @@ agentSchema.methods.canPerformOperation = function(this: IAgentDocument, operati
   return true; // If no restrictions specified, allow all operations
 };
 
-export const Agent = mongoose.model<IAgentDocument, IAgentModel>('Agent', agentSchema);
+// Export the model using the safe pattern to avoid overwrite errors
+const _model = () => mongoose.model<IAgentDocument, IAgentModel>('Agent', agentSchema);
+export const Agent = (mongoose.models.Agent || _model()) as ReturnType<typeof _model>;
 export { AgentStatus };
 export default Agent;

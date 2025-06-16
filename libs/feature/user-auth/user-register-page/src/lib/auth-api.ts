@@ -55,12 +55,21 @@ export class AuthAPI {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Registration failed');
+        // Extract the specific error message from the backend
+        const errorMessage = data.error || data.message || 'Registration failed';
+        throw new Error(errorMessage);
       }
 
       return data;
     } catch (error) {
       console.error('Registration API error:', error);
+      
+      // If it's a fetch error (network issues, etc.), provide a user-friendly message
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        throw new Error('Network error. Please check your connection and try again.');
+      }
+      
+      // Re-throw the error as-is if it already has a message
       throw error;
     }
   }
