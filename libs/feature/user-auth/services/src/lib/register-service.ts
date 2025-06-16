@@ -1,5 +1,5 @@
 import { Organization, User, Service } from '@automation-ai/database';
-import { IUser, IOrg, IService } from '@automation-ai/types';
+import { IUser, IOrg, IService, ServiceCategory } from '@automation-ai/types';
 
 export interface RegistrationData {
   user: {
@@ -15,7 +15,7 @@ export interface RegistrationData {
     serviceName: string;
     description: string;
     serviceShortName: string;
-    category?: string;
+    category?: ServiceCategory;
     tags?: string[];
   };
 }
@@ -23,7 +23,6 @@ export interface RegistrationData {
 export interface RegistrationResult {
   user: IUser;
   organization: IOrg;
-  service: IService;
 }
 
 /**
@@ -32,7 +31,7 @@ export interface RegistrationResult {
  * @returns Promise containing the created user, organization, and service
  */
 export async function registerUserWithService(registrationData: RegistrationData): Promise<RegistrationResult> {
-  const { user: userData, service: serviceData } = registrationData;
+  const { user: userData } = registrationData;
 
   try {
     // 1. Create the user first
@@ -75,15 +74,6 @@ export async function registerUserWithService(registrationData: RegistrationData
       }
     });
 
-    // 3. Create the service
-    const service = await Service.create({
-      serviceName: serviceData.serviceName,
-      description: serviceData.description,
-      serviceShortName: serviceData.serviceShortName,
-      category: serviceData.category || 'OTHER',
-      tags: serviceData.tags || []
-    });
-
     // 4. Associate user with the organization
     user.organizations = [organization.id];
     user.currentOrgId = organization.id;
@@ -92,92 +82,45 @@ export async function registerUserWithService(registrationData: RegistrationData
     return {
       user: user.toJSON() as IUser,
       organization: organization.toJSON() as IOrg,
-      service: service.toJSON() as unknown as IService
     };
 
   } catch (error) {
     // Clean up any created resources in case of error
     console.error('Registration failed:', error);
+    
+    // Handle specific MongoDB errors
+    if (error && typeof error === 'object' && 'code' in error) {
+      const mongoError = error as { code: number; keyPattern?: Record<string, number> };
+      if (mongoError.code === 11000) {
+        // Duplicate key error
+        const keyPattern = mongoError.keyPattern;
+        if (keyPattern?.username) {
+          throw new Error('A user with this username already exists. Please choose a different username.');
+        }
+        if (keyPattern?.emailid) {
+          throw new Error('A user with this email already exists. Please use a different email or try logging in.');
+        }
+        if (keyPattern?.name) {
+          throw new Error('An organization with this name already exists.');
+        }
+        throw new Error('This information is already registered. Please try with different details.');
+      }
+    }
+    
+    // Handle validation errors
+    if (error && typeof error === 'object' && 'name' in error) {
+      const validationError = error as { name: string; message?: string };
+      if (validationError.name === 'ValidationError') {
+        const validationMessage = validationError.message || 'Validation failed';
+        throw new Error(`Registration validation failed: ${validationMessage}`);
+      }
+    }
+    
+    // Generic error handling
     throw new Error(`Registration failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
-/**
- * Register just a service for an existing user and create personal org if needed
- * @param userEmail - Email of the existing user
- * @param serviceData - Service data to create
- * @returns Promise containing the organization and service
- */
-export async function registerServiceForUser(
-  userEmail: string, 
-  serviceData: RegistrationData['service']
-): Promise<{ organization: IOrg; service: IService }> {
-  try {
-    // Find the user
-    const user = await User.findOne({ emailid: userEmail });
-    if (!user) {
-      throw new Error(`User with email ${userEmail} not found`);
-    }
-
-    // Check if user already has a personal organization
-    const sanitizedEmail = userEmail.replace(/[^a-zA-Z0-9]/g, '-');
-    const orgName = `personal-org-${sanitizedEmail}`;
-    
-    let organization = await Organization.findOne({ name: orgName });
-    
-    // Create personal organization if it doesn't exist
-    if (!organization) {
-      organization = await Organization.create({
-        name: orgName,
-        displayName: `Personal Organization for ${user.name}`,
-        description: `Personal workspace for ${userEmail}`,
-        active: true,
-        subscription: {
-          plan: 'free',
-          maxUsers: 5,
-          features: ['basic']
-        },
-        settings: {
-          timezone: 'UTC',
-          currency: 'USD',
-          locale: 'en'
-        },
-        metaData: {
-          createdBy: user.id,
-          personalOrg: true
-        }
-      });
-
-      // Update user's organizations  
-      user.organizations = user.organizations || [];
-      if (!user.organizations.includes(organization.id)) {
-        user.organizations.push(organization.id);
-        if (!user.currentOrgId) {
-          user.currentOrgId = organization.id;
-        }
-        await user.save();
-      }
-    }
-
-    // Create the service
-    const service = await Service.create({
-      serviceName: serviceData.serviceName,
-      description: serviceData.description,
-      serviceShortName: serviceData.serviceShortName,
-      category: serviceData.category || 'OTHER',
-      tags: serviceData.tags || []
-    });
-
-    return {
-      organization: organization.toJSON() as IOrg,
-      service: service.toJSON() as unknown as IService
-    };
-
-  } catch (error) {
-    console.error('Service registration failed:', error);
-    throw new Error(`Service registration failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-  }
-}
 
 /**
  * Get or create personal organization for a user

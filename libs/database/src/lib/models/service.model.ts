@@ -56,8 +56,7 @@ const serviceSchema = new Schema<IServiceDocument>({
   collection: 'services'
 });
 
-// Indexes for better performance
-serviceSchema.index({ serviceShortName: 1 });
+// Indexes for better performance (excluding serviceShortName as it already has a unique index)
 serviceSchema.index({ category: 1 });
 serviceSchema.index({ tags: 1 });
 serviceSchema.index({ serviceName: 'text', description: 'text' }); // Text search index

@@ -4,6 +4,7 @@ import { RegisterPage, AuthAPI, RegisterFormData } from '@automation-ai/user-reg
 import { LanguageSwitcher } from '@automation-ai/multiple-lang';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ServiceCategory } from '@automation-ai/types';
 
 interface RegisterFormValues {
   firstName: string;
@@ -34,11 +35,6 @@ export default function RegisterPageWrapper() {
         email: values.email,
         password: values.password,
         terms: values.terms,
-        // Optional service data - you can customize this
-        serviceName: `${values.firstName} ${values.lastName}'s Personal Service`,
-        serviceDescription: `Personal automation service for ${values.firstName} ${values.lastName}`,
-        serviceCategory: 'OTHER',
-        serviceTags: ['personal', 'automation']
       };
 
       console.log('Registration attempt:', { email: values.email });

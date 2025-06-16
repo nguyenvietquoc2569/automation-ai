@@ -87,9 +87,7 @@ const userSchema = new Schema<IUserDocument>({
   collection: 'users'
 });
 
-// Indexes for better performance
-userSchema.index({ username: 1 });
-userSchema.index({ emailid: 1 });
+// Indexes for better performance (excluding username and emailid as they already have unique indexes)
 userSchema.index({ organizations: 1 });
 userSchema.index({ active: 1 });
 userSchema.index({ currentOrgId: 1 });

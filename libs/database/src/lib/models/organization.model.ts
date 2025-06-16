@@ -139,8 +139,7 @@ const orgSchema = new Schema<IOrgDocument>({
   collection: 'organizations'
 });
 
-// Indexes for better performance
-orgSchema.index({ name: 1 });
+// Indexes for better performance (excluding name as it already has a unique index)
 orgSchema.index({ domain: 1 });
 orgSchema.index({ active: 1 });
 orgSchema.index({ 'subscription.plan': 1 });

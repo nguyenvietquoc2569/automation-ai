@@ -77,11 +77,6 @@ export async function POST(request: NextRequest) {
           id: result.organization.id,
           name: result.organization.name,
           displayName: result.organization.displayName
-        },
-        service: {
-          id: result.service.id,
-          serviceName: result.service.serviceName,
-          serviceShortName: result.service.serviceShortName
         }
       }
     }, { status: 201 });
