@@ -1,8 +1,8 @@
 // Simple test to validate TypeScript configuration and agent types
 // This test imports directly from source files to avoid build dependencies
 
-import { IAgent, AgentStatus, AgentType } from './libs/shared/types/src/common/agent';
-import { IService, ServiceStatus, ServiceType } from './libs/shared/types/src/common/service';
+import { IAgent, AgentStatus, AgentType } from '../libs/shared/types/src/common/agent';
+import { IService, ServiceStatus, ServiceType } from '../libs/shared/types/src/common/service';
 
 // Test agent creation
 const testAgent: IAgent = {

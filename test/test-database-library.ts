@@ -1,8 +1,8 @@
-import { databaseService } from './libs/database/src/lib/database-service';
-import { User } from './libs/database/src/lib/models/user.model';
-import { Organization } from './libs/database/src/lib/models/organization.model';
-import { Service } from './libs/database/src/lib/models/service.model';
-import { Agent, AgentStatus } from './libs/database/src/lib/models/agent.model';
+import { databaseService } from '../libs/database/src/lib/database-service';
+import { User } from '../libs/database/src/lib/models/user.model';
+import { Organization } from '../libs/database/src/lib/models/organization.model';
+import { Service } from '../libs/database/src/lib/models/service.model';
+import { Agent, AgentStatus } from '../libs/database/src/lib/models/agent.model';
 import { ServiceCategory } from '@automation-ai/types';
 
 /**
