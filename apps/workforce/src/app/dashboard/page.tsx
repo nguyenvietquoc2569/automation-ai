@@ -16,9 +16,7 @@ import {
   List,
   Breadcrumb,
   Dropdown,
-  Menu,
   Badge,
-  Alert,
   Divider,
   Timeline
 } from 'antd';
@@ -31,7 +29,6 @@ import {
   ProjectOutlined,
   DashboardOutlined,
   BellOutlined,
-  MenuOutlined,
   DownOutlined,
   CrownOutlined,
   SafetyOutlined,
@@ -58,7 +55,7 @@ function DashboardContent() {
       icon: <SettingOutlined />
     },
     {
-      type: 'divider'
+      type: 'divider' as const
     },
     {
       key: 'logout',
@@ -72,19 +69,19 @@ function DashboardContent() {
   const quickStats = [
     {
       title: 'Total Projects',
-      value: session.permissions.includes('project:read') ? 12 : 'N/A',
+      value: session?.permissions?.includes('project:read') ? 12 : 'N/A',
       suffix: 'active',
       prefix: <ProjectOutlined style={{ color: '#1890ff' }} />
     },
     {
       title: 'Team Members',
-      value: session.permissions.includes('team:read') ? 24 : 'N/A',
+      value: session?.permissions?.includes('team:read') ? 24 : 'N/A',
       suffix: 'members',
       prefix: <TeamOutlined style={{ color: '#52c41a' }} />
     },
     {
       title: 'Tasks Completed',
-      value: session.permissions.includes('task:read') ? 168 : 'N/A',
+      value: session?.permissions?.includes('task:read') ? 168 : 'N/A',
       suffix: 'this month',
       prefix: <CheckCircleOutlined style={{ color: '#faad14' }} />
     },
@@ -162,8 +159,8 @@ function DashboardContent() {
             trigger={['click']}
           >
             <Space style={{ cursor: 'pointer' }}>
-              <Avatar src={session.user.avatar} icon={<UserOutlined />} />
-              <span>{session.user.name}</span>
+              <Avatar src={session?.user?.avatar} icon={<UserOutlined />} />
+              <span>{session?.user?.name}</span>
               <DownOutlined />
             </Space>
           </Dropdown>
@@ -183,19 +180,19 @@ function DashboardContent() {
               <div style={{ textAlign: 'center' }}>
                 <Avatar 
                   size={64} 
-                  src={session.user.avatar} 
+                  src={session?.user?.avatar} 
                   icon={<UserOutlined />}
                   style={{ marginBottom: '12px' }}
                 />
                 <div>
-                  <Text strong>{session.user.name}</Text>
+                  <Text strong>{session?.user?.name}</Text>
                   <br />
                   <Text type="secondary" style={{ fontSize: '12px' }}>
-                    {session.user.emailid}
+                    {session?.user?.emailid}
                   </Text>
-                  {session.user.title && (
+                  {session?.user?.title && (
                     <div style={{ marginTop: '8px' }}>
-                      <Tag color="blue" size="small">{session.user.title}</Tag>
+                      <Tag color="blue">{session?.user?.title}</Tag>
                     </div>
                   )}
                 </div>
@@ -205,21 +202,20 @@ function DashboardContent() {
             {/* Organization Info */}
             <Card size="small" title="Current Organization">
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                {session.currentOrg.logo && (
-                  <Avatar size="small" src={session.currentOrg.logo} />
+                {session?.currentOrg?.logo && (
+                  <Avatar size="small" src={session?.currentOrg?.logo} />
                 )}
                 <div style={{ flex: 1 }}>
                   <Text strong style={{ fontSize: '12px' }}>
-                    {session.currentOrg.displayName || session.currentOrg.name}
+                    {session?.currentOrg?.displayName || session?.currentOrg?.name}
                   </Text>
-                  {session.currentOrg.subscription?.plan && (
+                  {session?.currentOrg?.subscription?.plan && (
                     <div>
                       <Tag 
                         color="green" 
-                        size="small"
                         icon={<CrownOutlined />}
                       >
-                        {session.currentOrg.subscription.plan.toUpperCase()}
+                        {session?.currentOrg?.subscription?.plan?.toUpperCase()}
                       </Tag>
                     </div>
                   )}
@@ -238,7 +234,7 @@ function DashboardContent() {
               <Row gutter={24} align="middle">
                 <Col flex="auto">
                   <Title level={2} style={{ margin: 0 }}>
-                    Good {new Date().getHours() < 12 ? 'Morning' : 'Afternoon'}, {session.user.name}! 👋
+                    Good {new Date().getHours() < 12 ? 'Morning' : 'Afternoon'}, {session?.user?.name}! 👋
                   </Title>
                   <Paragraph style={{ fontSize: '16px', color: '#666', margin: '8px 0 0 0' }}>
                     Welcome to your workforce management dashboard. Here&apos;s what&apos;s happening today.
@@ -313,30 +309,30 @@ function DashboardContent() {
                   style={{ marginBottom: '24px' }}
                 >
                   <div style={{ marginBottom: '16px' }}>
-                    <Text strong>Permissions ({session.permissions.length})</Text>
+                    <Text strong>Permissions ({session?.permissions?.length || 0})</Text>
                     <div style={{ marginTop: '8px' }}>
                       <Space wrap>
-                        {session.permissions.slice(0, 6).map((permission) => (
-                          <Tag key={permission} color="cyan" size="small">
+                        {session?.permissions?.slice(0, 6).map((permission) => (
+                          <Tag key={permission} color="cyan">
                             {permission}
                           </Tag>
                         ))}
-                        {session.permissions.length > 6 && (
-                          <Tag color="default" size="small">
-                            +{session.permissions.length - 6} more
+                        {(session?.permissions?.length || 0) > 6 && (
+                          <Tag color="default">
+                            +{(session?.permissions?.length || 0) - 6} more
                           </Tag>
                         )}
                       </Space>
                     </div>
                   </div>
 
-                  {session.roles.length > 0 && (
+                  {(session?.roles?.length || 0) > 0 && (
                     <div>
-                      <Text strong>Roles ({session.roles.length})</Text>
+                      <Text strong>Roles ({session?.roles?.length || 0})</Text>
                       <div style={{ marginTop: '8px' }}>
                         <Space wrap>
-                          {session.roles.map((role) => (
-                            <Tag key={role} color="purple" size="small">
+                          {session?.roles?.map((role) => (
+                            <Tag key={role} color="purple">
                               {role}
                             </Tag>
                           ))}
@@ -367,16 +363,16 @@ function DashboardContent() {
                 </Card>
 
                 {/* Available Organizations */}
-                {session.availableOrgs.length > 1 && (
+                {(session?.availableOrgs?.length || 0) > 1 && (
                   <Card title="Switch Organization">
                     <List
                       size="small"
-                      dataSource={session.availableOrgs}
+                      dataSource={session?.availableOrgs || []}
                       renderItem={(org) => (
                         <List.Item
                           style={{ 
-                            cursor: org.id === session.currentOrg.id ? 'default' : 'pointer',
-                            background: org.id === session.currentOrg.id ? '#f6ffed' : 'transparent',
+                            cursor: org.id === session?.currentOrg?.id ? 'default' : 'pointer',
+                            background: org.id === session?.currentOrg?.id ? '#f6ffed' : 'transparent',
                             padding: '8px 12px',
                             borderRadius: '6px',
                             marginBottom: '4px'
@@ -387,8 +383,8 @@ function DashboardContent() {
                             title={
                               <div>
                                 <Text strong>{org.displayName || org.name}</Text>
-                                {org.id === session.currentOrg.id && (
-                                  <Tag color="green" size="small" style={{ marginLeft: '8px' }}>
+                                {org.id === session?.currentOrg?.id && (
+                                  <Tag color="green" style={{ marginLeft: '8px' }}>
                                     Current
                                   </Tag>
                                 )}
