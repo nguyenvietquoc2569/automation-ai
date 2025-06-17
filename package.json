@@ -70,6 +70,7 @@
     "libs/feature/user-auth/*",
     "libs/backend/*",
     "libs/*",
-    "libs/feature/*"
+    "libs/feature/*",
+    "apps/workforce/libs/shared/*"
   ]
 }
