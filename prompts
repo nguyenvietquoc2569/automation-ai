@@ -1,0 +1,1 @@
+think about the dashboard, we will now reuse the shell from dashboard including the header, sidebar and footer. now please wrap them as a layout and put it into the @automation-ai/fe-dashboard and known as the dashboard layout. the dashboard layout will have input are: the breadcrum data. apply it to pages/dashboard

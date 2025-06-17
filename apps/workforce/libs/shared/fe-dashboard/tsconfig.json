@@ -3,6 +3,9 @@
   "include": [],
   "references": [
     {
+      "path": "../../../../../libs/feature/fe-session-management"
+    },
+    {
       "path": "./tsconfig.lib.json"
     }
   ],

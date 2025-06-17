@@ -53,6 +53,9 @@
       "path": "../../libs/feature/user-auth/forget-page"
     },
     {
+      "path": "libs/shared/fe-dashboard"
+    },
+    {
       "path": "../../libs/shared/multiple-lang"
     },
     {
