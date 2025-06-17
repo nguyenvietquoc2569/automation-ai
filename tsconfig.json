@@ -34,7 +34,7 @@
       "path": "./libs/feature/fe-session-management"
     },
     {
-      "path": "./apps/workforce/libs/shared/fe-dashboard"
+      "path": "./libs/shared/fe-dashboard"
     }
   ]
 }

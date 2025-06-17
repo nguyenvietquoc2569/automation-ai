@@ -30,7 +30,7 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [
     {
-      "path": "../../../libs/feature/fe-session-management/tsconfig.lib.json"
+      "path": "../../feature/fe-session-management/tsconfig.lib.json"
     }
   ]
 }

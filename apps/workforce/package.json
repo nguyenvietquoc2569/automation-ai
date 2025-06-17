@@ -10,7 +10,8 @@
     "@automation-ai/login-page": "*",
     "@automation-ai/services": "*",
     "@automation-ai/database": "*",
-    "@automation-ai/fe-session-management": "*"
+    "@automation-ai/fe-session-management": "*",
+    "@automation-ai/fe-dashboard": "*"
   },
   "nx": {
     "name": "@automation-ai/workforce"
