@@ -16,19 +16,25 @@ interface DashboardFooterProps {
   showCopyright?: boolean;
 }
 
-export function DashboardFooter({ 
+export function DashboardFooter({
   companyName = 'workforce',
   year = new Date().getFullYear(),
   links = [],
-  showCopyright = true 
+  showCopyright = true,
 }: DashboardFooterProps) {
   return (
-    <AntFooter style={{ textAlign: 'center', background: '#f5f5f5', padding: '16px 24px' }}>
+    <AntFooter
+      style={{
+        textAlign: 'center',
+        background: '#f5f5f5',
+        padding: '16px 24px',
+      }}
+    >
       <div style={{ marginBottom: '8px' }}>
         {links.length > 0 && (
           <Space split={<span style={{ color: '#d9d9d9' }}>|</span>}>
             {links.map((link) => (
-              <Text 
+              <Text
                 key={link.key}
                 style={{ cursor: 'pointer' }}
                 onClick={link.onClick}

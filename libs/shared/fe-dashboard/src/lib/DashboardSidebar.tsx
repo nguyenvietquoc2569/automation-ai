@@ -13,16 +13,16 @@ interface DashboardSidebarProps {
   showOrganization?: boolean;
 }
 
-export function DashboardSidebar({ 
-  width = 250, 
+export function DashboardSidebar({
+  width = 250,
   collapsedWidth = 0,
   showUserProfile = true,
-  showOrganization = true 
+  showOrganization = true,
 }: DashboardSidebarProps) {
   const { session } = useSession();
 
   return (
-    <Sider 
+    <Sider
       width={width}
       style={{ background: '#fff' }}
       breakpoint="lg"
@@ -32,9 +32,9 @@ export function DashboardSidebar({
         {showUserProfile && (
           <Card size="small" style={{ marginBottom: '16px' }}>
             <div style={{ textAlign: 'center' }}>
-              <Avatar 
-                size={64} 
-                src={session?.user?.avatar} 
+              <Avatar
+                size={64}
+                src={session?.user?.avatar}
                 icon={<UserOutlined />}
                 style={{ marginBottom: '12px' }}
               />
@@ -62,14 +62,12 @@ export function DashboardSidebar({
               )}
               <div style={{ flex: 1 }}>
                 <Text strong style={{ fontSize: '12px' }}>
-                  {session?.currentOrg?.displayName || session?.currentOrg?.name}
+                  {session?.currentOrg?.displayName ||
+                    session?.currentOrg?.name}
                 </Text>
                 {session?.currentOrg?.subscription?.plan && (
                   <div>
-                    <Tag 
-                      color="green" 
-                      icon={<CrownOutlined />}
-                    >
+                    <Tag color="green" icon={<CrownOutlined />}>
                       {session?.currentOrg?.subscription?.plan?.toUpperCase()}
                     </Tag>
                   </div>

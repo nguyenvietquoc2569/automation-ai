@@ -43,7 +43,7 @@ export function DashboardLayout({
         breadcrumbs={breadcrumbItems}
         notificationCount={notificationCount}
       />
-      
+
       <Layout>
         {showSidebar && (
           <DashboardSidebar
@@ -51,8 +51,8 @@ export function DashboardLayout({
             showOrganization={true}
           />
         )}
-        
-        <Layout style={{ marginLeft: showSidebar ? 250 : 0 }}>
+
+        <Layout>
           <Content
             style={{
               margin: '24px 16px',
@@ -64,7 +64,7 @@ export function DashboardLayout({
           >
             {children}
           </Content>
-          
+
           <DashboardFooter {...footerProps} />
         </Layout>
       </Layout>

@@ -1,11 +1,19 @@
 'use client';
-import { Layout, Typography, Space, Breadcrumb, Badge, Dropdown, Avatar } from 'antd';
-import { 
-  DashboardOutlined, 
-  BellOutlined, 
-  DownOutlined, 
+import {
+  Layout,
+  Typography,
+  Space,
+  Breadcrumb,
+  Badge,
+  Dropdown,
+  Avatar,
+} from 'antd';
+import {
+  DashboardOutlined,
+  BellOutlined,
+  DownOutlined,
   UserOutlined,
-  HomeOutlined 
+  HomeOutlined,
 } from '@ant-design/icons';
 import { useSession } from '@automation-ai/fe-session-management';
 import { BreadcrumbItem, UserMenuItem } from './types';
@@ -20,11 +28,11 @@ interface DashboardHeaderProps {
   notificationCount?: number;
 }
 
-export function DashboardHeader({ 
-  title = 'Workforce Dashboard', 
+export function DashboardHeader({
+  title = 'Workforce Dashboard',
   breadcrumbs = [],
   userMenuItems = [],
-  notificationCount = 0 
+  notificationCount = 0,
 }: DashboardHeaderProps) {
   const { session } = useSession();
 
@@ -35,36 +43,41 @@ export function DashboardHeader({
       title: 'Home',
       icon: <HomeOutlined />,
       href: '#',
-      onClick: (e) => e.preventDefault()
+      onClick: (e) => e.preventDefault(),
     },
     {
       key: 'dashboard',
-      title: 'Dashboard'
-    }
+      title: 'Dashboard',
+    },
   ];
 
-  const finalBreadcrumbs = breadcrumbs.length > 0 ? breadcrumbs : defaultBreadcrumbs;
+  const finalBreadcrumbs =
+    breadcrumbs.length > 0 ? breadcrumbs : defaultBreadcrumbs;
 
   return (
-    <AntHeader 
-      style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
+    <AntHeader
+      style={{
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'space-between',
         padding: '0 24px',
         background: '#fff',
-        borderBottom: '1px solid #f0f0f0'
+        borderBottom: '1px solid #f0f0f0',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <DashboardOutlined style={{ fontSize: '24px', color: '#1890ff', marginRight: '12px' }} />
-        <Title level={4} style={{ margin: 0 }}>{title}</Title>
+        <DashboardOutlined
+          style={{ fontSize: '24px', color: '#1890ff', marginRight: '12px' }}
+        />
+        <Title level={4} style={{ margin: 0 }}>
+          {title}
+        </Title>
       </div>
-      
+
       <Space size="large">
         <Breadcrumb>
           {finalBreadcrumbs.map((item, index) => (
-            <Breadcrumb.Item 
+            <Breadcrumb.Item
               key={item.key || index}
               href={item.href}
               onClick={item.onClick}
@@ -74,18 +87,18 @@ export function DashboardHeader({
             </Breadcrumb.Item>
           ))}
         </Breadcrumb>
-        
+
         <Badge count={notificationCount}>
           <BellOutlined style={{ fontSize: '18px' }} />
         </Badge>
-        
-        <Dropdown 
-          menu={{ 
+
+        <Dropdown
+          menu={{
             items: userMenuItems,
             onClick: ({ key }) => {
-              const item = userMenuItems.find(item => item.key === key);
+              const item = userMenuItems.find((item) => item.key === key);
               item?.onClick?.();
-            }
+            },
           }}
           trigger={['click']}
         >

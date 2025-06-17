@@ -7,7 +7,7 @@ import * as path from 'path';
 export default defineConfig(() => ({
   root: __dirname,
   cacheDir:
-    '../../../../../node_modules/.vite/apps/workforce/libs/shared/fe-dashboard',
+    '../../../node_modules/.vite/apps/workforce/libs/shared/fe-dashboard',
   plugins: [
     react(),
     dts({
