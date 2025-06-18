@@ -60,21 +60,8 @@ export function ForgotPasswordPage({ LanguageSwitcher, onForgotPassword, LinkCom
           justifyContent: 'center',
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           padding: '20px',
-          position: 'relative',
         }}
       >
-        {LanguageSwitcher && (
-          <div
-            style={{
-              position: 'absolute',
-              top: '20px',
-              right: '20px',
-            }}
-          >
-            <LanguageSwitcher style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '8px', borderRadius: '6px' }} />
-          </div>
-        )}
-        
         <Card
           style={{
             width: '100%',
@@ -82,16 +69,30 @@ export function ForgotPasswordPage({ LanguageSwitcher, onForgotPassword, LinkCom
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
           }}
         >
-          <Result
-            status="success"
-            title={intl.formatMessage({ id: 'auth.emailSent' })}
-            subTitle={intl.formatMessage({ id: 'auth.resetDescription' })}
-            extra={[
-              <Link key="login" href="/login">
-                <Button type="primary">{intl.formatMessage({ id: 'auth.backToLogin' })}</Button>
-              </Link>,
-            ]}
-          />
+          <Space direction="vertical" size="large" style={{ width: '100%' }}>
+            {LanguageSwitcher && (
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-16px' }}>
+                <LanguageSwitcher 
+                  style={{ 
+                    background: 'rgba(240, 242, 245, 0.8)', 
+                    padding: '4px 8px', 
+                    borderRadius: '4px' 
+                  }} 
+                />
+              </div>
+            )}
+            
+            <Result
+              status="success"
+              title={intl.formatMessage({ id: 'auth.emailSent' })}
+              subTitle={intl.formatMessage({ id: 'auth.resetDescription' })}
+              extra={[
+                <Link key="login" href="/login">
+                  <Button type="primary">{intl.formatMessage({ id: 'auth.backToLogin' })}</Button>
+                </Link>,
+              ]}
+            />
+          </Space>
         </Card>
       </div>
     );
@@ -106,21 +107,8 @@ export function ForgotPasswordPage({ LanguageSwitcher, onForgotPassword, LinkCom
         justifyContent: 'center',
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         padding: '20px',
-        position: 'relative',
       }}
     >
-      {LanguageSwitcher && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '20px',
-            right: '20px',
-          }}
-        >
-          <LanguageSwitcher style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '8px', borderRadius: '6px' }} />
-        </div>
-      )}
-      
       <Card
         style={{
           width: '100%',
@@ -129,6 +117,18 @@ export function ForgotPasswordPage({ LanguageSwitcher, onForgotPassword, LinkCom
         }}
       >
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
+          {LanguageSwitcher && (
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-16px' }}>
+              <LanguageSwitcher 
+                style={{ 
+                  background: 'rgba(240, 242, 245, 0.8)', 
+                  padding: '4px 8px', 
+                  borderRadius: '4px' 
+                }} 
+              />
+            </div>
+          )}
+          
           <div style={{ textAlign: 'center' }}>
             <RobotOutlined
               style={{

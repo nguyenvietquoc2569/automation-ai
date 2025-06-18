@@ -157,27 +157,8 @@ export function LoginPage({
         justifyContent: 'center',
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         padding: '20px',
-        position: 'relative',
       }}
     >
-      {LanguageSwitcher && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '20px',
-            right: '20px',
-          }}
-        >
-          <LanguageSwitcher 
-            style={{ 
-              background: 'rgba(255, 255, 255, 0.9)', 
-              padding: '8px', 
-              borderRadius: '6px' 
-            }} 
-          />
-        </div>
-      )}
-      
       <Card
         style={{
           width: '100%',
@@ -186,6 +167,18 @@ export function LoginPage({
         }}
       >
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
+          {LanguageSwitcher && (
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-16px' }}>
+              <LanguageSwitcher 
+                style={{ 
+                  background: 'rgba(240, 242, 245, 0.8)', 
+                  padding: '4px 8px', 
+                  borderRadius: '4px' 
+                }} 
+              />
+            </div>
+          )}
+          
           <div style={{ textAlign: 'center' }}>
             <RobotOutlined
               style={{
