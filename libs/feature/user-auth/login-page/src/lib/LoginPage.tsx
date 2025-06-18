@@ -7,7 +7,6 @@ import {
   Card,
   Typography,
   Space,
-  Divider,
   Checkbox,
   Alert,
 } from 'antd';
@@ -15,8 +14,6 @@ import {
   UserOutlined,
   LockOutlined,
   RobotOutlined,
-  GoogleOutlined,
-  FacebookOutlined,
 } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 import { AuthAPI, LoginFormData, UserSession } from './auth-api';
@@ -279,21 +276,6 @@ export function LoginPage({
               </Button>
             </Form.Item>
           </Form>
-
-          <Divider>Or continue with</Divider>
-
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Button icon={<GoogleOutlined />} block style={{ height: '40px' }}>
-              Continue with Google
-            </Button>
-            <Button
-              icon={<FacebookOutlined />}
-              block
-              style={{ height: '40px' }}
-            >
-              Continue with Facebook
-            </Button>
-          </Space>
 
           <div style={{ textAlign: 'center' }}>
             <Text type="secondary">
