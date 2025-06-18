@@ -201,10 +201,35 @@ export function SessionProvider({
   }, []);
 
   const switchOrganization = useCallback(async (orgId: string) => {
-    // TODO: Implement organization switching API call
-    console.log('Switch organization to:', orgId);
-    // For now, just refresh the session
-    await refreshSession();
+    try {
+      const response = await fetch('/api/auth/switch-organization', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ organizationId: orgId }),
+      });
+
+      if (!response.ok) {
+        let errorMessage = 'Failed to switch organization';
+        try {
+          const errorData = await response.json();
+          if (errorData && typeof errorData === 'object' && 'error' in errorData) {
+            errorMessage = errorData.error as string || errorMessage;
+          }
+        } catch {
+          // If parsing error response fails, use default message
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Refresh session to get updated organization data
+      await refreshSession();
+    } catch (error) {
+      console.error('Switch organization failed:', error);
+      throw error;
+    }
   }, [refreshSession]);
 
   const contextValue: SessionContextValue = {

@@ -20,6 +20,7 @@ import {
 } from '@ant-design/icons';
 import { useSession } from '@automation-ai/fe-session-management';
 import { LanguageSwitcher } from '@automation-ai/multiple-lang';
+import { OrganizationSwitcher } from './OrganizationSwitcher';
 import { BreadcrumbItem, UserMenuItem } from './types';
 
 const { Header: AntHeader } = Layout;
@@ -145,6 +146,8 @@ export function DashboardHeader({
         <Badge count={notificationCount}>
           <BellOutlined style={{ fontSize: '18px' }} />
         </Badge>
+
+        <OrganizationSwitcher showLabel={false} />
 
         <LanguageSwitcher />
 
