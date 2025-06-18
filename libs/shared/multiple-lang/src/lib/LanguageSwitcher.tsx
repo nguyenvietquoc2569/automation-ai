@@ -13,18 +13,21 @@ interface LanguageSwitcherProps {
 }
 
 export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ style }) => {
-  const { locale, setLocale } = useLanguage();
+  const { locale, setLocale, isHydrated } = useLanguage();
   const intl = useIntl();
 
   const handleChange = (value: SupportedLocale) => {
     setLocale(value);
   };
 
+  // Show a consistent state during SSR/hydration
+  const displayLocale = isHydrated ? locale : 'en';
+
   return (
     <Space style={style}>
       <GlobalOutlined />
       <Select
-        value={locale}
+        value={displayLocale}
         onChange={handleChange}
         style={{ width: 120 }}
         styles={{
@@ -32,6 +35,8 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ style }) => 
             root: { zIndex: 9999 }
           }
         }}
+        // Disable during hydration to prevent mismatch
+        disabled={!isHydrated}
       >
         <Option value="en">
           {intl.formatMessage({ id: 'language.english' })}

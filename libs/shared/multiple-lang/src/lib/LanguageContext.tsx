@@ -11,6 +11,7 @@ interface LanguageContextType {
   locale: SupportedLocale;
   setLocale: (locale: SupportedLocale) => void;
   messages: Record<string, string>;
+  isHydrated: boolean;
 }
 
 const coreMessages = {
@@ -30,7 +31,7 @@ export const useLanguage = () => {
 
 interface LanguageProviderProps {
   children: React.ReactNode;
-  storageKey?: string; // Allow customization of localStorage key
+  storageKey?: string; // Allow customization of sessionStorage key
   additionalMessages?: {
     en?: Record<string, string>;
     vi?: Record<string, string>;
@@ -42,7 +43,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   storageKey = 'app-locale', // Default storage key
   additionalMessages = {},
 }) => {
+  // Always start with English for SSR consistency
   const [locale, setLocaleState] = useState<SupportedLocale>('en');
+  const [isHydrated, setIsHydrated] = useState(false);
 
   // Merge core messages with additional messages from libraries
   const mergedMessages = {
@@ -50,23 +53,43 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
     vi: { ...coreMessages.vi, ...additionalMessages.vi },
   };
 
-  // Load saved locale from localStorage on component mount
+  // Load saved locale from sessionStorage on client-side hydration
   useEffect(() => {
-    const savedLocale = localStorage.getItem(storageKey) as SupportedLocale;
-    if (savedLocale && (savedLocale === 'en' || savedLocale === 'vi')) {
-      setLocaleState(savedLocale);
+    // Mark as hydrated
+    setIsHydrated(true);
+    
+    // Only access sessionStorage on the client side
+    if (typeof window !== 'undefined') {
+      try {
+        const savedLocale = sessionStorage.getItem(storageKey) as SupportedLocale;
+        if (savedLocale && (savedLocale === 'en' || savedLocale === 'vi')) {
+          setLocaleState(savedLocale);
+        }
+      } catch (error) {
+        // Handle cases where sessionStorage might not be available
+        console.warn('Failed to access sessionStorage:', error);
+      }
     }
   }, [storageKey]);
 
   const setLocale = (newLocale: SupportedLocale) => {
     setLocaleState(newLocale);
-    localStorage.setItem(storageKey, newLocale);
+    
+    // Only save to sessionStorage on the client side
+    if (typeof window !== 'undefined') {
+      try {
+        sessionStorage.setItem(storageKey, newLocale);
+      } catch (error) {
+        console.warn('Failed to save to sessionStorage:', error);
+      }
+    }
   };
 
   const contextValue: LanguageContextType = {
     locale,
     setLocale,
     messages: mergedMessages[locale],
+    isHydrated,
   };
 
   return (
