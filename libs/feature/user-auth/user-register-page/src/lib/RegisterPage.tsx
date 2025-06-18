@@ -7,7 +7,6 @@ import {
   Card,
   Typography,
   Space,
-  Divider,
   Checkbox,
   Alert,
 } from 'antd';
@@ -15,8 +14,6 @@ import {
   LockOutlined,
   MailOutlined,
   RobotOutlined,
-  GoogleOutlined,
-  FacebookOutlined,
 } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 
@@ -129,18 +126,6 @@ export function RegisterPage({ LanguageSwitcher, onRegister, LinkComponent, load
         }}
       >
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
-          {LanguageSwitcher && (
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-16px' }}>
-              <LanguageSwitcher 
-                style={{ 
-                  background: 'rgba(240, 242, 245, 0.8)', 
-                  padding: '4px 8px', 
-                  borderRadius: '4px' 
-                }} 
-              />
-            </div>
-          )}
-          
           <div style={{ textAlign: 'center' }}>
             <RobotOutlined
               style={{
@@ -284,20 +269,11 @@ export function RegisterPage({ LanguageSwitcher, onRegister, LinkComponent, load
             </Form.Item>
           </Form>
 
-          <Divider>Or continue with</Divider>
-
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Button icon={<GoogleOutlined />} block style={{ height: '40px' }}>
-              Continue with Google
-            </Button>
-            <Button
-              icon={<FacebookOutlined />}
-              block
-              style={{ height: '40px' }}
-            >
-              Continue with Facebook
-            </Button>
-          </Space>
+          {LanguageSwitcher && (
+            <div style={{ textAlign: 'center', marginTop: '16px', marginBottom: '16px' }}>
+              <LanguageSwitcher />
+            </div>
+          )}
 
           <div style={{ textAlign: 'center' }}>
             <Text type="secondary">

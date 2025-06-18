@@ -70,18 +70,6 @@ export function ForgotPasswordPage({ LanguageSwitcher, onForgotPassword, LinkCom
           }}
         >
           <Space direction="vertical" size="large" style={{ width: '100%' }}>
-            {LanguageSwitcher && (
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-16px' }}>
-                <LanguageSwitcher 
-                  style={{ 
-                    background: 'rgba(240, 242, 245, 0.8)', 
-                    padding: '4px 8px', 
-                    borderRadius: '4px' 
-                  }} 
-                />
-              </div>
-            )}
-            
             <Result
               status="success"
               title={intl.formatMessage({ id: 'auth.emailSent' })}
@@ -92,6 +80,12 @@ export function ForgotPasswordPage({ LanguageSwitcher, onForgotPassword, LinkCom
                 </Link>,
               ]}
             />
+            
+            {LanguageSwitcher && (
+              <div style={{ textAlign: 'center', marginTop: '16px' }}>
+                <LanguageSwitcher />
+              </div>
+            )}
           </Space>
         </Card>
       </div>
@@ -117,18 +111,6 @@ export function ForgotPasswordPage({ LanguageSwitcher, onForgotPassword, LinkCom
         }}
       >
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
-          {LanguageSwitcher && (
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '-16px' }}>
-              <LanguageSwitcher 
-                style={{ 
-                  background: 'rgba(240, 242, 245, 0.8)', 
-                  padding: '4px 8px', 
-                  borderRadius: '4px' 
-                }} 
-              />
-            </div>
-          )}
-          
           <div style={{ textAlign: 'center' }}>
             <RobotOutlined
               style={{
@@ -178,6 +160,12 @@ export function ForgotPasswordPage({ LanguageSwitcher, onForgotPassword, LinkCom
               </Button>
             </Form.Item>
           </Form>
+
+          {LanguageSwitcher && (
+            <div style={{ textAlign: 'center', marginTop: '16px', marginBottom: '16px' }}>
+              <LanguageSwitcher />
+            </div>
+          )}
 
           <div style={{ textAlign: 'center' }}>
             <Link
