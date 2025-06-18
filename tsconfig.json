@@ -35,6 +35,12 @@
     },
     {
       "path": "./libs/shared/fe-dashboard"
+    },
+    {
+      "path": "./libs/feature/workbench/service-managemant-fe"
+    },
+    {
+      "path": "./libs/feature/workbench/service-managemant-be"
     }
   ]
 }

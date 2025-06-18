@@ -9,6 +9,7 @@ export * from './models/session.model';
 export * from './connection';
 export * from './database-service';
 export * from './session-service';
+export * from './service-manager';
 
 // Re-export types from the types library
 export { ServiceCategory } from '@automation-ai/types';

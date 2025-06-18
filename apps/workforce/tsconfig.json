@@ -32,7 +32,7 @@
       ],
       "@automation-ai/fe-dashboard": [
         "../../libs/shared/fe-dashboard/src/index.ts"
-      ],
+      ]
     },
     "outDir": "dist",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
@@ -56,13 +56,19 @@
       "path": "../../libs/feature/user-auth/forget-page"
     },
     {
-      "path": "../../libs/shared/fe-dashboard"
-    },
-    {
       "path": "../../libs/shared/multiple-lang"
     },
     {
       "path": "../../libs/shared/types"
+    },
+    {
+      "path": "../../libs/feature/workbench/service-managemant-fe"
+    },
+    {
+      "path": "../../libs/feature/workbench/service-managemant-be"
+    },
+    {
+      "path": "../../libs/shared/fe-dashboard"
     },
     {
       "path": "../../libs/feature/fe-session-management"
@@ -75,9 +81,6 @@
     },
     {
       "path": "../../libs/feature/user-auth/login-page"
-    },
-    {
-      "path": "../../libs/shared/fe-dashboard"
     }
   ],
   "exclude": [

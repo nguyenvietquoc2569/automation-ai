@@ -71,6 +71,7 @@
     "libs/backend/*",
     "libs/*",
     "libs/feature/*",
-    "apps/workforce/libs/shared/*"
+    "apps/workforce/libs/shared/*",
+    "libs/feature/workbench/*"
   ]
 }
