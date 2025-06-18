@@ -6,6 +6,9 @@
       "path": "../../feature/fe-session-management"
     },
     {
+      "path": "../multiple-lang"
+    },
+    {
       "path": "./tsconfig.lib.json"
     }
   ],

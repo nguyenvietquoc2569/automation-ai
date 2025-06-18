@@ -20,6 +20,10 @@
     "customConditions": ["development"],
     "paths": {
       "@automation-ai/database": ["libs/database/src/index.ts"],
+      "@automation-ai/fe-dashboard": ["libs/shared/fe-dashboard/src/index.ts"],
+      "@automation-ai/fe-session-management": [
+        "libs/feature/fe-session-management/src/index.ts"
+      ],
       "@automation-ai/forget-page": [
         "libs/feature/user-auth/forget-page/src/index.ts"
       ],
@@ -32,12 +36,6 @@
       "@automation-ai/types": ["libs/shared/types/src/index.ts"],
       "@automation-ai/user-register-page": [
         "libs/feature/user-auth/user-register-page/src/index.ts"
-      ],
-      "@automation-ai/fe-dashboard": [
-        "libs/shared/fe-dashboard/src/index.ts"
-      ],
-      "@automation-ai/fe-session-management": [
-        "libs/feature/fe-session-management/src/index.ts"
       ]
     }
   }

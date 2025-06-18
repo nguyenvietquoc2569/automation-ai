@@ -31,6 +31,9 @@
   "references": [
     {
       "path": "../../feature/fe-session-management/tsconfig.lib.json"
+    },
+    {
+      "path": "../multiple-lang/tsconfig.lib.json"
     }
   ]
 }

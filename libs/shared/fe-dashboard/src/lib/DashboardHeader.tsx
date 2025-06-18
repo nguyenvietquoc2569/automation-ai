@@ -19,6 +19,7 @@ import {
   SettingOutlined,
 } from '@ant-design/icons';
 import { useSession } from '@automation-ai/fe-session-management';
+import { LanguageSwitcher } from '@automation-ai/multiple-lang';
 import { BreadcrumbItem, UserMenuItem } from './types';
 
 const { Header: AntHeader } = Layout;
@@ -144,6 +145,8 @@ export function DashboardHeader({
         <Badge count={notificationCount}>
           <BellOutlined style={{ fontSize: '18px' }} />
         </Badge>
+
+        <LanguageSwitcher />
 
         <Dropdown
           menu={{
