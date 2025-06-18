@@ -31,6 +31,7 @@ export interface UserMenuItem {
   icon?: ReactNode;
   onClick?: () => void;
   danger?: boolean;
+  type?: 'divider';
 }
 
 /**

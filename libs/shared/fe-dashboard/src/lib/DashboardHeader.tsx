@@ -7,6 +7,7 @@ import {
   Badge,
   Dropdown,
   Avatar,
+  type MenuProps,
 } from 'antd';
 import {
   DashboardOutlined,
@@ -14,6 +15,8 @@ import {
   DownOutlined,
   UserOutlined,
   HomeOutlined,
+  LogoutOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
 import { useSession } from '@automation-ai/fe-session-management';
 import { BreadcrumbItem, UserMenuItem } from './types';
@@ -34,7 +37,57 @@ export function DashboardHeader({
   userMenuItems = [],
   notificationCount = 0,
 }: DashboardHeaderProps) {
-  const { session } = useSession();
+  const { session, logout } = useSession();
+
+  // Default user menu items if none provided
+  const defaultUserMenuItems: MenuProps['items'] = [
+    {
+      key: 'profile',
+      label: 'Profile Settings',
+      icon: <UserOutlined />,
+      onClick: () => {
+        // TODO: Navigate to profile page
+        console.log('Navigate to profile');
+      },
+    },
+    {
+      key: 'settings',
+      label: 'Account Settings',
+      icon: <SettingOutlined />,
+      onClick: () => {
+        // TODO: Navigate to settings page
+        console.log('Navigate to settings');
+      },
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: 'logout',
+      label: 'Logout',
+      icon: <LogoutOutlined />,
+      danger: true,
+      onClick: () => {
+        logout();
+      },
+    },
+  ];
+
+  // Convert user menu items to Ant Design format
+  const convertedUserMenuItems: MenuProps['items'] = userMenuItems.map(item => {
+    if (item.type === 'divider') {
+      return { type: 'divider' };
+    }
+    return {
+      key: item.key,
+      label: item.label,
+      icon: item.icon,
+      danger: item.danger,
+      onClick: item.onClick,
+    };
+  });
+
+  const finalUserMenuItems = userMenuItems.length > 0 ? convertedUserMenuItems : defaultUserMenuItems;
 
   // Default breadcrumbs if none provided
   const defaultBreadcrumbs: BreadcrumbItem[] = [
@@ -94,11 +147,7 @@ export function DashboardHeader({
 
         <Dropdown
           menu={{
-            items: userMenuItems,
-            onClick: ({ key }) => {
-              const item = userMenuItems.find((item) => item.key === key);
-              item?.onClick?.();
-            },
+            items: finalUserMenuItems,
           }}
           trigger={['click']}
         >
