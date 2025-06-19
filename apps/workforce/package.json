@@ -13,7 +13,9 @@
     "@automation-ai/fe-session-management": "*",
     "@automation-ai/fe-dashboard": "*",
     "@automation-ai/service-managemant-be": "*",
-    "@automation-ai/service-managemant-fe": "*"
+    "@automation-ai/service-managemant-fe": "*",
+    "@automation-ai/fe-services": "*",
+    "@automation-ai/be-services": "*"
   },
   "nx": {
     "name": "@automation-ai/workforce"

@@ -62,6 +62,12 @@
       "path": "../../libs/shared/types"
     },
     {
+      "path": "../../libs/feature/services/be-services"
+    },
+    {
+      "path": "../../libs/feature/services/fe-services"
+    },
+    {
       "path": "../../libs/feature/workbench/service-managemant-fe"
     },
     {

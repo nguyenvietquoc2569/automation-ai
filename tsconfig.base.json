@@ -19,8 +19,14 @@
     "target": "es2022",
     "customConditions": ["development"],
     "paths": {
+      "@automation-ai/be-services": [
+        "libs/feature/services/be-services/src/index.ts"
+      ],
       "@automation-ai/database": ["libs/database/src/index.ts"],
       "@automation-ai/fe-dashboard": ["libs/shared/fe-dashboard/src/index.ts"],
+      "@automation-ai/fe-services": [
+        "libs/feature/services/fe-services/src/index.ts"
+      ],
       "@automation-ai/fe-session-management": [
         "libs/feature/fe-session-management/src/index.ts"
       ],
