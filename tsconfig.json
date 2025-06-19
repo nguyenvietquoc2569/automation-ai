@@ -47,6 +47,12 @@
     },
     {
       "path": "./libs/feature/services/be-services"
+    },
+    {
+      "path": "./libs/feature/services/be-service-detail"
+    },
+    {
+      "path": "./libs/feature/services/fe-service-detail"
     }
   ]
 }
