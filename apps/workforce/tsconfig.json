@@ -33,6 +33,9 @@
       "@automation-ai/fe-dashboard": [
         "../../libs/shared/fe-dashboard/src/index.ts"
       ],
+      "@automation-ai/fe-service-detail": [
+        "../../libs/feature/services/fe-service-detail/src/index.ts"
+      ],
       "@automation-ai/fe-services": [
         "../../libs/feature/services/fe-services/src/index.ts"
       ],
@@ -81,6 +84,9 @@
     },
     {
       "path": "../../libs/feature/services/be-services"
+    },
+    {
+      "path": "../../libs/feature/services/fe-service-detail"
     },
     {
       "path": "../../libs/feature/services/fe-services"

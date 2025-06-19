@@ -4,6 +4,9 @@
   "references": [
     {
       "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "../be-service-detail"
     }
   ],
   "extends": "../../../../tsconfig.base.json"

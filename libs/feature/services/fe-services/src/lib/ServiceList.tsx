@@ -149,7 +149,7 @@ export default function ServiceList({ onServiceClick }: ServiceListProps) {
     } else {
       // Default behavior: navigate to service detail
       if (typeof window !== 'undefined') {
-        window.location.href = `/dashboard/services/${service.serviceShortName}`;
+        window.location.href = `/services/${service.serviceShortName}`;
       }
     }
   };

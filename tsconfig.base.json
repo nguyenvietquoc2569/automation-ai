@@ -19,11 +19,17 @@
     "target": "es2022",
     "customConditions": ["development"],
     "paths": {
+      "@automation-ai/be-service-detail": [
+        "libs/feature/services/be-service-detail/src/index.ts"
+      ],
       "@automation-ai/be-services": [
         "libs/feature/services/be-services/src/index.ts"
       ],
       "@automation-ai/database": ["libs/database/src/index.ts"],
       "@automation-ai/fe-dashboard": ["libs/shared/fe-dashboard/src/index.ts"],
+      "@automation-ai/fe-service-detail": [
+        "libs/feature/services/fe-service-detail/src/index.ts"
+      ],
       "@automation-ai/fe-services": [
         "libs/feature/services/fe-services/src/index.ts"
       ],
