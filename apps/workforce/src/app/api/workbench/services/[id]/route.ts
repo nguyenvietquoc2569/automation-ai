@@ -6,11 +6,16 @@ import { AuthGuard } from '../../../../../utils/auth-guard';
  * GET /api/workbench/services/[id]
  * Get service by ID
  */
-export const GET = AuthGuard.withAuth(async (request: NextRequest) => {
+export const GET = AuthGuard.withAuth(async (request: NextRequest, { params }: { params: { id: string } }) => {
   try {
-    const url = new URL(request.url);
-    const pathSegments = url.pathname.split('/');
-    const id = pathSegments[pathSegments.length - 1];
+    const id = params.id;
+    
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: 'Service ID is required' },
+        { status: 400 }
+      );
+    }
     
     const result = await ServiceManagementController.getServiceById(id);
     
@@ -42,12 +47,17 @@ export const GET = AuthGuard.withAuth(async (request: NextRequest) => {
  * PUT /api/workbench/services/[id]
  * Update service by ID
  */
-export const PUT = AuthGuard.withAuth(async (request: NextRequest) => {
+export const PUT = AuthGuard.withAuth(async (request: NextRequest, { params }: { params: { id: string } }) => {
   try {
-    const url = new URL(request.url);
-    const pathSegments = url.pathname.split('/');
-    const id = pathSegments[pathSegments.length - 1];
+    const id = params.id;
     const body = await request.json();
+    
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: 'Service ID is required' },
+        { status: 400 }
+      );
+    }
     
     const result = await ServiceManagementController.updateService(id, body);
     
@@ -79,11 +89,16 @@ export const PUT = AuthGuard.withAuth(async (request: NextRequest) => {
  * DELETE /api/workbench/services/[id]
  * Delete service by ID
  */
-export const DELETE = AuthGuard.withAuth(async (request: NextRequest) => {
+export const DELETE = AuthGuard.withAuth(async (request: NextRequest, { params }: { params: { id: string } }) => {
   try {
-    const url = new URL(request.url);
-    const pathSegments = url.pathname.split('/');
-    const id = pathSegments[pathSegments.length - 1];
+    const id = params.id;
+    
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: 'Service ID is required' },
+        { status: 400 }
+      );
+    }
     
     const result = await ServiceManagementController.deleteService(id);
     

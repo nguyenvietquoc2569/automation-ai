@@ -6,14 +6,18 @@ import { AuthGuard } from '../../../../../../utils/auth-guard';
  * PUT /api/workbench/services/[id]/toggle-status
  * Toggle service active/inactive status
  */
-export const PUT = AuthGuard.withAuth(async (request: NextRequest) => {
+export const PUT = AuthGuard.withAuth(async (request: NextRequest, { params }: { params: { id: string } }) => {
   try {
-    const url = new URL(request.url);
-    const pathSegments = url.pathname.split('/');
-    const id = pathSegments[pathSegments.length - 2]; // Get ID from path
-    
+    const id = params.id;
     const body = await request.json();
     const { isActive } = body;
+    
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: 'Service ID is required' },
+        { status: 400 }
+      );
+    }
     
     if (typeof isActive !== 'boolean') {
       return NextResponse.json(
