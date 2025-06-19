@@ -152,9 +152,9 @@ export const ServiceManagement: React.FC<ServiceManagementProps> = ({
   }, [fetchServices]);
 
   // Toggle service status
-  const toggleServiceStatus = async (serviceId: string, isActive: boolean) => {
+  const toggleServiceStatus = async (serviceShortName: string, isActive: boolean) => {
     try {
-      const response = await fetch(`/api/workbench/services/${serviceId}/toggle-status`, {
+      const response = await fetch(`/api/workbench/services/${serviceShortName}/toggle-status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -177,9 +177,9 @@ export const ServiceManagement: React.FC<ServiceManagementProps> = ({
   };
 
   // Delete service
-  const deleteService = async (serviceId: string) => {
+  const deleteService = async (serviceShortName: string) => {
     try {
-      const response = await fetch(`/api/workbench/services/${serviceId}`, {
+      const response = await fetch(`/api/workbench/services/${serviceShortName}`, {
         method: 'DELETE',
       });
 
@@ -215,7 +215,7 @@ export const ServiceManagement: React.FC<ServiceManagementProps> = ({
     try {
       const isEditing = !!editingService;
       const url = isEditing 
-        ? `/api/workbench/services/${editingService._id}`
+        ? `/api/workbench/services/${editingService.serviceShortName}`
         : '/api/workbench/services';
       
       const method = isEditing ? 'PUT' : 'POST';
@@ -306,7 +306,7 @@ export const ServiceManagement: React.FC<ServiceManagementProps> = ({
           <Switch
             size="small"
             checked={isActive}
-            onChange={(checked) => toggleServiceStatus(record._id, checked)}
+            onChange={(checked) => toggleServiceStatus(record.serviceShortName, checked)}
           />
         </div>
       ),
@@ -326,7 +326,7 @@ export const ServiceManagement: React.FC<ServiceManagementProps> = ({
           <Popconfirm
             title="Delete Service"
             description="Are you sure you want to delete this service?"
-            onConfirm={() => deleteService(record._id)}
+            onConfirm={() => deleteService(record.serviceShortName)}
             okText="Yes"
             cancelText="No"
           >
@@ -411,7 +411,7 @@ export const ServiceManagement: React.FC<ServiceManagementProps> = ({
           columns={columns}
           dataSource={services}
           loading={loading}
-          rowKey="_id"
+          rowKey="serviceShortName"
           pagination={{
             current: pagination.current,
             pageSize: pagination.pageSize,

@@ -6,15 +6,18 @@ import { AuthGuard } from '../../../../../../utils/auth-guard';
  * PUT /api/workbench/services/[id]/toggle-status
  * Toggle service active/inactive status
  */
-export const PUT = AuthGuard.withAuth(async (request: NextRequest, { params }: { params: { id: string } }) => {
+export const PUT = AuthGuard.withAuth(async (request: NextRequest) => {
   try {
-    const id = params.id;
+    // Extract service short name from URL path
+    const url = new URL(request.url);
+    const pathSegments = url.pathname.split('/');
+    const serviceShortName = pathSegments[pathSegments.length - 2]; // Get ID from path (before 'toggle-status')
     const body = await request.json();
     const { isActive } = body;
     
-    if (!id) {
+    if (!serviceShortName) {
       return NextResponse.json(
-        { success: false, error: 'Service ID is required' },
+        { success: false, error: 'Service short name is required' },
         { status: 400 }
       );
     }
@@ -29,7 +32,7 @@ export const PUT = AuthGuard.withAuth(async (request: NextRequest, { params }: {
       );
     }
     
-    const result = await ServiceManagementController.toggleServiceStatus(id, isActive);
+    const result = await ServiceManagementController.toggleServiceStatusByShortName(serviceShortName, isActive);
     
     return NextResponse.json(result);
   } catch (error) {

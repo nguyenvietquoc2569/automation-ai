@@ -92,6 +92,27 @@ export class ServiceManagementController {
   }
   
   /**
+   * Get service by short name
+   */
+  static async getServiceByShortName(serviceShortName: string) {
+    try {
+      const service = await Service.findOne({ serviceShortName });
+      
+      if (!service) {
+        throw new Error('Service not found');
+      }
+      
+      return {
+        success: true,
+        data: service
+      };
+    } catch (error) {
+      console.error('Error getting service by short name:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Get service by ID
    */
   static async getServiceById(id: string) {
@@ -172,6 +193,32 @@ export class ServiceManagementController {
   }
   
   /**
+   * Update service by short name
+   */
+  static async updateServiceByShortName(serviceShortName: string, updateData: Partial<CreateServiceDto>) {
+    try {
+      const service = await Service.findOneAndUpdate(
+        { serviceShortName },
+        updateData,
+        { new: true, runValidators: true }
+      );
+      
+      if (!service) {
+        throw new Error(`Service with short name '${serviceShortName}' not found`);
+      }
+      
+      return {
+        success: true,
+        data: service,
+        message: 'Service updated successfully'
+      };
+    } catch (error) {
+      console.error('Error updating service by short name:', error);
+      throw error;
+    }
+  }
+  
+  /**
    * Delete service
    */
   static async deleteService(id: string) {
@@ -189,6 +236,28 @@ export class ServiceManagementController {
       };
     } catch (error) {
       console.error('Error deleting service:', error);
+      throw error;
+    }
+  }
+  
+  /**
+   * Delete service by short name
+   */
+  static async deleteServiceByShortName(serviceShortName: string) {
+    try {
+      const service = await Service.findOneAndDelete({ serviceShortName });
+      
+      if (!service) {
+        throw new Error(`Service with short name '${serviceShortName}' not found`);
+      }
+      
+      return {
+        success: true,
+        data: service,
+        message: 'Service deleted successfully'
+      };
+    } catch (error) {
+      console.error('Error deleting service by short name:', error);
       throw error;
     }
   }
@@ -215,6 +284,32 @@ export class ServiceManagementController {
       };
     } catch (error) {
       console.error('Error toggling service status:', error);
+      throw error;
+    }
+  }
+  
+  /**
+   * Toggle service status by short name (activate/deactivate)
+   */
+  static async toggleServiceStatusByShortName(serviceShortName: string, isActive: boolean) {
+    try {
+      const service = await Service.findOneAndUpdate(
+        { serviceShortName },
+        { isActive },
+        { new: true, runValidators: true }
+      );
+      
+      if (!service) {
+        throw new Error(`Service with short name '${serviceShortName}' not found`);
+      }
+      
+      return {
+        success: true,
+        data: service,
+        message: `Service ${isActive ? 'activated' : 'deactivated'} successfully`
+      };
+    } catch (error) {
+      console.error('Error toggling service status by short name:', error);
       throw error;
     }
   }
