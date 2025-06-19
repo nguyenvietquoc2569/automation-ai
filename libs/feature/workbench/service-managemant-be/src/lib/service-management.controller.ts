@@ -1,4 +1,4 @@
-import { ServiceManager } from '@automation-ai/database';
+import { Service } from '@automation-ai/database';
 import { ServiceCategory, CreateServiceDto } from '@automation-ai/types';
 
 /**
@@ -50,7 +50,28 @@ export class ServiceManagementController {
       }
 
       // Get services with pagination
-      const result = await ServiceManager.getAllServices(page, limit, sortBy);
+      const skip = (page - 1) * limit;
+      const mongoSortOrder: Record<string, 1 | -1> = { [sortBy]: 1 };
+      
+      const [services, total] = await Promise.all([
+        Service.find(queryConditions)
+          .sort(mongoSortOrder)
+          .skip(skip)
+          .limit(limit),
+        Service.countDocuments(queryConditions)
+      ]);
+      
+      const result = {
+        services,
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
+          hasNext: page * limit < total,
+          hasPrev: page > 1
+        }
+      };
       
       return {
         success: true,
@@ -75,7 +96,7 @@ export class ServiceManagementController {
    */
   static async getServiceById(id: string) {
     try {
-      const service = await ServiceManager.getServiceById(id);
+      const service = await Service.findById(id);
       
       if (!service) {
         throw new Error('Service not found');
@@ -101,7 +122,17 @@ export class ServiceManagementController {
         throw new Error('Service name, description, and short name are required');
       }
       
-      const service = await ServiceManager.createService(serviceData);
+      // Check if service with same short name already exists
+      const existingService = await Service.findOne({ 
+        serviceShortName: serviceData.serviceShortName 
+      });
+      
+      if (existingService) {
+        throw new Error(`Service with short name '${serviceData.serviceShortName}' already exists`);
+      }
+      
+      const service = new Service(serviceData);
+      await service.save();
       
       return {
         success: true,
@@ -119,10 +150,15 @@ export class ServiceManagementController {
    */
   static async updateService(id: string, updateData: Partial<CreateServiceDto>) {
     try {
-      const service = await ServiceManager.updateService({
-        _id: id,
-        ...updateData
-      });
+      const service = await Service.findByIdAndUpdate(
+        id,
+        updateData,
+        { new: true, runValidators: true }
+      );
+      
+      if (!service) {
+        throw new Error(`Service with ID '${id}' not found`);
+      }
       
       return {
         success: true,
@@ -140,7 +176,11 @@ export class ServiceManagementController {
    */
   static async deleteService(id: string) {
     try {
-      const service = await ServiceManager.deleteService(id);
+      const service = await Service.findByIdAndDelete(id);
+      
+      if (!service) {
+        throw new Error(`Service with ID '${id}' not found`);
+      }
       
       return {
         success: true,
@@ -158,11 +198,15 @@ export class ServiceManagementController {
    */
   static async toggleServiceStatus(id: string, isActive: boolean) {
     try {
-      // Add isActive field to service if it doesn't exist
-      const service = await ServiceManager.updateService({
-        _id: id,
-        isActive
-      });
+      const service = await Service.findByIdAndUpdate(
+        id,
+        { isActive },
+        { new: true, runValidators: true }
+      );
+      
+      if (!service) {
+        throw new Error(`Service with ID '${id}' not found`);
+      }
       
       return {
         success: true,
@@ -180,7 +224,34 @@ export class ServiceManagementController {
    */
   static async getServiceStats() {
     try {
-      const stats = await ServiceManager.getServiceStats();
+      const [
+        totalServices,
+        servicesByCategory,
+        recentServices
+      ] = await Promise.all([
+        Service.countDocuments({}),
+        Service.aggregate([
+          {
+            $group: {
+              _id: '$category',
+              count: { $sum: 1 }
+            }
+          },
+          {
+            $sort: { count: -1 }
+          }
+        ]),
+        Service.find({})
+          .sort({ createdAt: -1 })
+          .limit(5)
+          .select('serviceName serviceShortName category createdAt')
+      ]);
+      
+      const stats = {
+        totalServices,
+        servicesByCategory,
+        recentServices
+      };
       
       return {
         success: true,
@@ -197,7 +268,9 @@ export class ServiceManagementController {
    */
   static async searchServices(searchText: string) {
     try {
-      const services = await ServiceManager.searchServices(searchText);
+      const services = await Service.find({
+        $text: { $search: searchText }
+      }).sort({ score: { $meta: 'textScore' } });
       
       return {
         success: true,
@@ -214,7 +287,7 @@ export class ServiceManagementController {
    */
   static async getServicesByCategory(category: ServiceCategory) {
     try {
-      const services = await ServiceManager.getServicesByCategory(category);
+      const services = await Service.find({ category });
       
       return {
         success: true,
@@ -231,7 +304,16 @@ export class ServiceManagementController {
    */
   static async addTagToService(id: string, tag: string) {
     try {
-      const service = await ServiceManager.addTagToService(id, tag);
+      const service = await Service.findById(id);
+      if (!service) {
+        throw new Error(`Service with ID '${id}' not found`);
+      }
+      
+      const normalizedTag = tag.toLowerCase().trim();
+      if (!service.tags.includes(normalizedTag)) {
+        service.tags.push(normalizedTag);
+        await service.save();
+      }
       
       return {
         success: true,
@@ -249,7 +331,14 @@ export class ServiceManagementController {
    */
   static async removeTagFromService(id: string, tag: string) {
     try {
-      const service = await ServiceManager.removeTagFromService(id, tag);
+      const service = await Service.findById(id);
+      if (!service) {
+        throw new Error(`Service with ID '${id}' not found`);
+      }
+      
+      const normalizedTag = tag.toLowerCase().trim();
+      service.tags = service.tags.filter(t => t !== normalizedTag);
+      await service.save();
       
       return {
         success: true,
