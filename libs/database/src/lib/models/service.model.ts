@@ -50,7 +50,11 @@ const serviceSchema = new Schema<IServiceDocument>({
     trim: true,
     lowercase: true,
     maxlength: [30, 'Tag cannot exceed 30 characters']
-  }]
+  }],
+  isActive: {
+    type: Boolean,
+    default: true
+  }
 }, {
   timestamps: true, // Automatically adds createdAt and updatedAt
   collection: 'services'

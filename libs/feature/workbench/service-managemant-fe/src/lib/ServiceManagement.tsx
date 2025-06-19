@@ -7,7 +7,6 @@ import {
   Input,
   Select,
   Tag,
-  Popconfirm,
   message,
   Card,
   Row,
@@ -22,7 +21,6 @@ import {
 import {
   PlusOutlined,
   EditOutlined,
-  DeleteOutlined,
   SearchOutlined,
   ReloadOutlined,
   SettingOutlined
@@ -176,27 +174,6 @@ export const ServiceManagement: React.FC<ServiceManagementProps> = ({
     }
   };
 
-  // Delete service
-  const deleteService = async (serviceShortName: string) => {
-    try {
-      const response = await fetch(`/api/workbench/services/${serviceShortName}`, {
-        method: 'DELETE',
-      });
-
-      const result = await response.json() as ApiResponse;
-
-      if (result.success) {
-        message.success('Service deleted successfully');
-        fetchServices(pagination.current, pagination.pageSize);
-      } else {
-        message.error(result.error || 'Failed to delete service');
-      }
-    } catch (error) {
-      console.error('Error deleting service:', error);
-      message.error('Error deleting service');
-    }
-  };
-
   // Handle edit service
   const handleEditService = (service: Service) => {
     setEditingService(service);
@@ -323,21 +300,6 @@ export const ServiceManagement: React.FC<ServiceManagementProps> = ({
               onClick={() => handleEditService(record)}
             />
           </Tooltip>
-          <Popconfirm
-            title="Delete Service"
-            description="Are you sure you want to delete this service?"
-            onConfirm={() => deleteService(record.serviceShortName)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Tooltip title="Delete Service">
-              <Button
-                type="text"
-                icon={<DeleteOutlined />}
-                danger
-              />
-            </Tooltip>
-          </Popconfirm>
         </Space>
       ),
     },

@@ -5,6 +5,7 @@ export interface IService {
   category: string;
   serviceShortName: string;
   tags: Array<string>;
+  isActive?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
