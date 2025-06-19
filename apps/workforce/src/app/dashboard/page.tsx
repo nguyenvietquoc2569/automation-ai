@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import Link from 'next/link';
 import { ProtectedRoute, useSession } from '@automation-ai/fe-session-management';
 import { DashboardLayout } from '@automation-ai/fe-dashboard';
 import { 
@@ -20,7 +20,8 @@ import {
   SafetyOutlined,
   ClockCircleOutlined,
   CheckCircleOutlined,
-  ExclamationCircleOutlined
+  ExclamationCircleOutlined,
+  ToolOutlined
 } from '@ant-design/icons';
 
 const { Title, Text, Paragraph } = Typography;
@@ -98,12 +99,15 @@ function DashboardContent() {
             </Paragraph>
           </Col>
           <Col>
-            <Button 
-              type="primary" 
-              size="large"
-            >
-              Quick Action
-            </Button>
+            <Link href="/services">
+              <Button 
+                type="primary" 
+                size="large"
+                icon={<ToolOutlined />}
+              >
+                Manage Services
+              </Button>
+            </Link>
           </Col>
         </Row>
       </Card>
@@ -124,6 +128,43 @@ function DashboardContent() {
           </Col>
         ))}
       </Row>
+
+      {/* Services Quick Overview */}
+      <Card title="Services Overview" style={{ marginBottom: '24px' }} 
+            extra={<Link href="/services"><Button type="primary" icon={<ToolOutlined />}>Manage All Services</Button></Link>}>
+        <Row gutter={[16, 16]}>
+          <Col xs={24} sm={8}>
+            <Card>
+              <Statistic
+                title="Active Services"
+                value={12}
+                valueStyle={{ color: '#52c41a' }}
+                prefix={<CheckCircleOutlined />}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={8}>
+            <Card>
+              <Statistic
+                title="Pending Services"
+                value={3}
+                valueStyle={{ color: '#faad14' }}
+                prefix={<ClockCircleOutlined />}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={8}>
+            <Card>
+              <Statistic
+                title="Service Categories"
+                value={5}
+                valueStyle={{ color: '#1890ff' }}
+                prefix={<ProjectOutlined />}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </Card>
 
       {/* Main Content Grid */}
       <Row gutter={[24, 24]}>

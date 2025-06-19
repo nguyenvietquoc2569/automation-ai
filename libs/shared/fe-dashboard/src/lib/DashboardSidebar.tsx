@@ -1,7 +1,17 @@
 'use client';
-import { Layout, Card, Avatar, Typography, Tag } from 'antd';
-import { UserOutlined, CrownOutlined } from '@ant-design/icons';
+import { Layout, Card, Avatar, Typography, Tag, Menu } from 'antd';
+import { 
+  UserOutlined, 
+  CrownOutlined, 
+  ToolOutlined,
+  TeamOutlined,
+  SettingOutlined,
+  ProjectOutlined,
+  DashboardOutlined
+} from '@ant-design/icons';
 import { useSession } from '@automation-ai/fe-session-management';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const { Sider } = Layout;
 const { Text } = Typography;
@@ -20,6 +30,36 @@ export function DashboardSidebar({
   showOrganization = true,
 }: DashboardSidebarProps) {
   const { session } = useSession();
+  const pathname = usePathname();
+
+  // Navigation menu items
+  const menuItems = [
+    {
+      key: '/dashboard',
+      icon: <DashboardOutlined />,
+      label: <Link href="/dashboard">Dashboard</Link>,
+    },
+    {
+      key: '/services',
+      icon: <ToolOutlined />,
+      label: <Link href="/services">Services</Link>,
+    },
+    {
+      key: '/projects',
+      icon: <ProjectOutlined />,
+      label: <Link href="/projects">Projects</Link>,
+    },
+    {
+      key: '/team',
+      icon: <TeamOutlined />,
+      label: <Link href="/team">Team</Link>,
+    },
+    {
+      key: '/settings',
+      icon: <SettingOutlined />,
+      label: <Link href="/settings">Settings</Link>,
+    },
+  ];
 
   return (
     <Sider
@@ -53,6 +93,14 @@ export function DashboardSidebar({
             </div>
           </Card>
         )}
+
+        {/* Navigation Menu */}
+        <Menu
+          mode="inline"
+          selectedKeys={[pathname]}
+          style={{ border: 'none', marginBottom: '16px' }}
+          items={menuItems}
+        />
 
         {showOrganization && (
           <Card size="small" title="Current Organization">
