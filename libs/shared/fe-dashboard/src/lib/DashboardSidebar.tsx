@@ -50,6 +50,11 @@ export function DashboardSidebar({
       label: <Link href="/projects">Projects</Link>,
     },
     {
+      key: '/dashboard/teams',
+      icon: <TeamOutlined />,
+      label: <Link href="/dashboard/teams">Teams</Link>,
+    },
+    {
       key: '/team',
       icon: <TeamOutlined />,
       label: <Link href="/team">Team</Link>,

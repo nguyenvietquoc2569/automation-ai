@@ -45,12 +45,8 @@
       "@automation-ai/fe-session-management": [
         "../../libs/feature/fe-session-management/src/index.ts"
       ],
-      "@automation-ai/database": [
-        "../../libs/database/src/index.ts"
-      ],
-      "@automation-ai/types": [
-        "../../libs/shared/types/src/index.ts"
-      ],
+      "@automation-ai/database": ["../../libs/database/src/index.ts"],
+      "@automation-ai/types": ["../../libs/shared/types/src/index.ts"],
       "@automation-ai/services": [
         "../../libs/feature/user-auth/services/src/index.ts"
       ]
@@ -71,6 +67,9 @@
   ],
   "references": [
     {
+      "path": "../../libs/feature/services/fe-service-detail"
+    },
+    {
       "path": "../../libs/feature/user-auth/user-register-page"
     },
     {
@@ -83,10 +82,13 @@
       "path": "../../libs/shared/types"
     },
     {
-      "path": "../../libs/feature/services/be-services"
+      "path": "../../libs/feature/teams-management/be-teams-management"
     },
     {
-      "path": "../../libs/feature/services/fe-service-detail"
+      "path": "../../libs/feature/teams-management/fe-teams-management"
+    },
+    {
+      "path": "../../libs/feature/services/be-services"
     },
     {
       "path": "../../libs/feature/services/fe-services"

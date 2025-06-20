@@ -1,1 +1,7 @@
 think about the dashboard, we will now reuse the shell from dashboard including the header, sidebar and footer. now please wrap them as a layout and put it into the @automation-ai/fe-dashboard and known as the dashboard layout. the dashboard layout will have input are: the breadcrum data. apply it to pages/dashboard
+
+I have just created projects: @automation-ai/be-teams-management (backend) and @automation-ai/fe-teams-management (frontend)
+Let 's code the teams management page at '/dashboard/teams'
+content of the page is tabs-ize, it include multi tabs.
+the first tab is 'Organization Management'.
+for the first tabs, a list of organization which is user belongs to will be show. there is action colume on the list table (include: edit action and disable/active switch). the edit action and disable/active switch are enable if the role of user against the org include permission 'org.manage' 

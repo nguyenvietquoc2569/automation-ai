@@ -15,7 +15,9 @@
     "@automation-ai/service-managemant-be": "*",
     "@automation-ai/service-managemant-fe": "*",
     "@automation-ai/fe-services": "*",
-    "@automation-ai/be-services": "*"
+    "@automation-ai/be-services": "*",
+    "@automation-ai/fe-teams-management": "*",
+    "@automation-ai/be-teams-management": "*"
   },
   "nx": {
     "name": "@automation-ai/workforce"

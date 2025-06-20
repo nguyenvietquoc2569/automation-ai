@@ -53,6 +53,12 @@
     },
     {
       "path": "./libs/feature/services/fe-service-detail"
+    },
+    {
+      "path": "./libs/feature/teams-management/fe-teams-management"
+    },
+    {
+      "path": "./libs/feature/teams-management/be-teams-management"
     }
   ]
 }

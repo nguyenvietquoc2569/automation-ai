@@ -1,0 +1,31 @@
+{
+  "name": "@automation-ai/fe-teams-management",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@automation-ai/be-teams-management": "*",
+    "@automation-ai/fe-session-management": "*",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "nx": {
+    "name": "fe-teams-management",
+    "tags": [
+      "npm:private",
+      "scope:feature",
+      "type:util"
+    ]
+  }
+}
