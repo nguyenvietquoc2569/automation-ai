@@ -1,9 +1,9 @@
 import { 
   registerUserWithService, 
-  registerServiceForUser, 
   getOrCreatePersonalOrg,
   RegistrationData 
 } from './register-service';
+import { ServiceCategory } from '@automation-ai/types';
 
 /**
  * Example usage of the registration services
@@ -24,7 +24,7 @@ export async function exampleCompleteRegistration() {
       serviceName: 'My Automation Service',
       description: 'A service that automates various tasks',
       serviceShortName: 'my-auto-service',
-      category: 'AUTOMATION',
+      category: ServiceCategory.AUTOMATION,
       tags: ['automation', 'productivity', 'workflow']
     }
   };
@@ -34,7 +34,6 @@ export async function exampleCompleteRegistration() {
     console.log('Registration successful!');
     console.log('User:', result.user.name);
     console.log('Organization:', result.organization.name);
-    console.log('Service:', result.service.serviceName);
     return result;
   } catch (error) {
     console.error('Registration failed:', error);
@@ -42,27 +41,9 @@ export async function exampleCompleteRegistration() {
   }
 }
 
-// Example 2: Register a service for an existing user
+// Example 2: Register a service for an existing user (deprecated)
 export async function exampleServiceRegistration() {
-  const userEmail = 'jane.smith@example.com';
-  const serviceData = {
-    serviceName: 'Data Processing Service',
-    description: 'Service for processing and analyzing data',
-    serviceShortName: 'data-proc-service',
-    category: 'DATA_PROCESSING',
-    tags: ['data', 'analytics', 'processing']
-  };
-
-  try {
-    const result = await registerServiceForUser(userEmail, serviceData);
-    console.log('Service registration successful!');
-    console.log('Organization:', result.organization.name);
-    console.log('Service:', result.service.serviceName);
-    return result;
-  } catch (error) {
-    console.error('Service registration failed:', error);
-    throw error;
-  }
+  throw new Error('Service registration for existing users is no longer supported. Use registerUserWithService instead.');
 }
 
 // Example 3: Get or create personal organization
@@ -106,7 +87,7 @@ export class RegistrationService {
         serviceName: formData.serviceName,
         description: formData.serviceDescription,
         serviceShortName: formData.serviceShortName,
-        category: 'OTHER',
+        category: ServiceCategory.OTHER,
         tags: []
       }
     };
@@ -115,18 +96,9 @@ export class RegistrationService {
   }
 
   /**
-   * Handle service registration for existing user
+   * Handle service registration for existing user (deprecated)
    */
-  static async handleServiceRegistration(
-    userEmail: string,
-    serviceFormData: {
-      serviceName: string;
-      description: string;
-      serviceShortName: string;
-      category?: string;
-      tags?: string[];
-    }
-  ) {
-    return await registerServiceForUser(userEmail, serviceFormData);
+  static async handleServiceRegistration() {
+    throw new Error('Service registration for existing users is no longer supported. Use registerUserWithService instead.');
   }
 }

@@ -2,9 +2,11 @@ import {
   Session, 
   User, 
   Organization,
+  UserRole,
   type ISessionDocument,
   type IUserDocument,
-  type IOrgDocument
+  type IOrgDocument,
+  type IUserRoleDocument
 } from './models';
 import {
   ISessionCreateRequest,
@@ -131,9 +133,9 @@ export class SessionService {
       // Get available organizations for the user
       availableOrgs: await this.getUserOrganizations(user),
       
-      // Set permissions and roles for this session
-      permissions: user.permissions || [],
-      roles: [], // Could be computed based on org membership
+      // Set permissions and roles for this session based on user roles in current org
+      permissions: await this.getUserPermissionsInOrg(user.id, targetOrgId),
+      roles: await this.getUserRolesInOrg(user.id, targetOrgId),
       
       // Security information
       security: {
@@ -380,6 +382,63 @@ export class SessionService {
       permissions: session.permissions || [],
       roles: session.roles || []
     };
+  }
+
+  /**
+   * Get combined permissions from all user roles in a specific organization
+   */
+  private async getUserPermissionsInOrg(userId: string, organizationId: string): Promise<string[]> {
+    try {
+      // Get all active user roles in the organization
+      const userRoles = await UserRole.find({
+        userId,
+        organizationId,
+        isActive: true
+      }).populate('roleId');
+
+      // Extract all permissions from all roles
+      const allPermissions: string[] = [];
+      for (const userRole of userRoles) {
+        if (userRole.roleId && typeof userRole.roleId === 'object' && 'permissions' in userRole.roleId) {
+          const role = userRole.roleId as { permissions: string[] }; // Type assertion for populated role
+          if (role.permissions && Array.isArray(role.permissions)) {
+            allPermissions.push(...role.permissions);
+          }
+        }
+      }
+
+      // Remove duplicates and return
+      return [...new Set(allPermissions)];
+    } catch (error) {
+      console.error('Error getting user permissions:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get user roles in a specific organization
+   */
+  private async getUserRolesInOrg(userId: string, organizationId: string): Promise<string[]> {
+    try {
+      const userRoles = await UserRole.find({
+        userId,
+        organizationId,
+        isActive: true
+      }).populate('roleId');
+
+      return userRoles
+        .map((userRole: IUserRoleDocument) => {
+          if (userRole.roleId && typeof userRole.roleId === 'object' && 'name' in userRole.roleId) {
+            const role = userRole.roleId as { name: string };
+            return role.name;
+          }
+          return null;
+        })
+        .filter(Boolean) as string[];
+    } catch (error) {
+      console.error('Error getting user roles:', error);
+      return [];
+    }
   }
 }
 

@@ -1,5 +1,5 @@
-import { Organization, User, Service } from '@automation-ai/database';
-import { IUser, IOrg, IService, ServiceCategory } from '@automation-ai/types';
+import { Organization, User, Role, UserRole } from '@automation-ai/database';
+import { IUser, IOrg, ServiceCategory } from '@automation-ai/types';
 
 export interface RegistrationData {
   user: {
@@ -74,7 +74,36 @@ export async function registerUserWithService(registrationData: RegistrationData
       }
     });
 
-    // 4. Associate user with the organization
+    // 3. Create owner role for the organization
+    const ownerRole = await Role.create({
+      name: 'owner',
+      displayName: 'Organization Owner',
+      description: 'Full administrative access to the organization',
+      organizationId: organization.id,
+      permissions: [
+        'org.owner',
+        'org.service.subscribe', 
+        'org.service.unsubscribe',
+        'org.manage',
+        'org.delete',
+        'org.users.manage',
+        'org.roles.manage',
+        'org.billing.manage'
+      ],
+      isActive: true,
+      isSystemRole: true
+    });
+
+    // 4. Assign owner role to the user
+    await UserRole.create({
+      userId: user.id,
+      roleId: ownerRole.id,
+      organizationId: organization.id,
+      assignedBy: user.id, // Self-assigned during registration
+      isActive: true
+    });
+
+    // 5. Associate user with the organization
     user.organizations = [organization.id];
     user.currentOrgId = organization.id;
     await user.save();
