@@ -50,7 +50,7 @@ export async function POST(
       if (existingSubscription.status !== 'active') {
         existingSubscription.status = 'active';
         existingSubscription.subscribedAt = new Date();
-        existingSubscription.unsubscribedAt = null;
+        existingSubscription.unsubscribedAt = undefined;
         const updatedSubscription = await existingSubscription.save();
         
         return NextResponse.json({
