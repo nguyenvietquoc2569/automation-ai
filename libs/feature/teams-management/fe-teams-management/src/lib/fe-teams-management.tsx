@@ -147,16 +147,99 @@ const styles = {
   },
   sliderChecked: {
     transform: 'translateX(20px)'
+  },
+  currentOrgHighlight: {
+    backgroundColor: '#fef3c7',
+    border: '2px solid #f59e0b'
+  },
+  tooltip: {
+    position: 'relative' as const,
+    display: 'inline-block'
+  },
+  tooltipText: {
+    visibility: 'hidden' as const,
+    width: '200px',
+    backgroundColor: '#374151',
+    color: '#fff',
+    textAlign: 'center' as const,
+    borderRadius: '6px',
+    padding: '8px',
+    position: 'absolute' as const,
+    zIndex: 1,
+    bottom: '125%',
+    left: '50%',
+    marginLeft: '-100px',
+    fontSize: '12px',
+    opacity: 0,
+    transition: 'opacity 0.3s'
+  },
+  tooltipVisible: {
+    visibility: 'visible' as const,
+    opacity: 1
+  },
+  tooltipArrow: {
+    position: 'absolute' as const,
+    top: '100%',
+    left: '50%',
+    marginLeft: '-5px',
+    borderWidth: '5px',
+    borderStyle: 'solid',
+    borderColor: '#374151 transparent transparent transparent'
+  },
+  currentOrgBadge: {
+    ...{
+      display: 'inline-flex',
+      alignItems: 'center',
+      padding: '4px 8px',
+      borderRadius: '16px',
+      fontSize: '12px',
+      fontWeight: '500'
+    },
+    backgroundColor: '#dbeafe',
+    color: '#1d4ed8',
+    marginLeft: '8px'
   }
 };
 
 interface OrganizationTableProps {
   organizations: OrganizationListItem[];
+  currentOrgId?: string;
   onEdit: (org: OrganizationListItem) => void;
   onToggleStatus: (org: OrganizationListItem, newStatus: boolean) => void;
 }
 
-function OrganizationTable({ organizations, onEdit, onToggleStatus }: OrganizationTableProps) {
+interface TooltipProps {
+  text: string;
+  children: React.ReactNode;
+  show?: boolean;
+}
+
+function Tooltip({ text, children, show = true }: TooltipProps) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  if (!show) {
+    return children as React.ReactElement;
+  }
+
+  return (
+    <div 
+      style={styles.tooltip}
+      onMouseEnter={() => setIsVisible(true)}
+      onMouseLeave={() => setIsVisible(false)}
+    >
+      {children}
+      <span style={{
+        ...styles.tooltipText,
+        ...(isVisible ? styles.tooltipVisible : {})
+      }}>
+        {text}
+        <span style={styles.tooltipArrow} />
+      </span>
+    </div>
+  );
+}
+
+function OrganizationTable({ organizations, currentOrgId, onEdit, onToggleStatus }: OrganizationTableProps) {
   return (
     <div style={styles.tableContainer}>
       <table style={styles.table}>
@@ -173,12 +256,25 @@ function OrganizationTable({ organizations, onEdit, onToggleStatus }: Organizati
         <tbody>
           {organizations.map((org) => {
             const permissions = TeamsApiService.getUserPermissions(org.userPermissions || []);
+            const isCurrentOrg = org.id === currentOrgId;
+            const canEdit = permissions.canEdit && !isCurrentOrg;
+            const canToggleStatus = permissions.canToggleStatus && !isCurrentOrg;
             
             return (
-              <tr key={org.id}>
+              <tr 
+                key={org.id}
+                style={isCurrentOrg ? styles.currentOrgHighlight : {}}
+              >
                 <td style={styles.td}>
                   <div>
-                    <div style={{ fontWeight: '500' }}>{org.displayName || org.name}</div>
+                    <div style={{ fontWeight: '500', display: 'flex', alignItems: 'center' }}>
+                      {org.displayName || org.name}
+                      {isCurrentOrg && (
+                        <span style={styles.currentOrgBadge}>
+                          Current
+                        </span>
+                      )}
+                    </div>
                     <div style={{ fontSize: '12px', color: '#6b7280' }}>{org.name}</div>
                   </div>
                 </td>
@@ -202,40 +298,50 @@ function OrganizationTable({ organizations, onEdit, onToggleStatus }: Organizati
                   </span>
                 </td>
                 <td style={styles.td}>
-                  <button
-                    style={{
-                      ...styles.actionButton,
-                      ...(permissions.canEdit ? {} : styles.disabledButton)
-                    }}
-                    onClick={() => permissions.canEdit && onEdit(org)}
-                    disabled={!permissions.canEdit}
+                  <Tooltip 
+                    text={isCurrentOrg ? "Switch to another organization to edit the current one" : (!permissions.canEdit ? "You don't have permission to edit this organization" : "")}
+                    show={isCurrentOrg || !permissions.canEdit}
                   >
-                    Edit
-                  </button>
-                  
-                  <label style={styles.switch}>
-                    <input
-                      style={styles.switchInput}
-                      type="checkbox"
-                      checked={org.isActive}
-                      onChange={(e) => {
-                        const target = e.target as HTMLInputElement;
-                        permissions.canToggleStatus && onToggleStatus(org, target.checked);
+                    <button
+                      style={{
+                        ...styles.actionButton,
+                        ...(canEdit ? {} : styles.disabledButton)
                       }}
-                      disabled={!permissions.canToggleStatus}
-                    />
-                    <span style={{
-                      ...styles.slider,
-                      ...(org.isActive ? styles.sliderActive : {}),
-                      opacity: permissions.canToggleStatus ? 1 : 0.5,
-                      cursor: permissions.canToggleStatus ? 'pointer' : 'not-allowed'
-                    }}>
+                      onClick={() => canEdit && onEdit(org)}
+                      disabled={!canEdit}
+                    >
+                      Edit
+                    </button>
+                  </Tooltip>
+                  
+                  <Tooltip 
+                    text={isCurrentOrg ? "Switch to another organization to modify the current one" : (!permissions.canToggleStatus ? "You don't have permission to change this organization's status" : "")}
+                    show={isCurrentOrg || !permissions.canToggleStatus}
+                  >
+                    <label style={styles.switch}>
+                      <input
+                        style={styles.switchInput}
+                        type="checkbox"
+                        checked={org.isActive}
+                        onChange={(e) => {
+                          const target = e.target as HTMLInputElement;
+                          canToggleStatus && onToggleStatus(org, target.checked);
+                        }}
+                        disabled={!canToggleStatus}
+                      />
                       <span style={{
-                        ...styles.sliderBefore,
-                        ...(org.isActive ? styles.sliderChecked : {})
-                      }} />
-                    </span>
-                  </label>
+                        ...styles.slider,
+                        ...(org.isActive ? styles.sliderActive : {}),
+                        opacity: canToggleStatus ? 1 : 0.5,
+                        cursor: canToggleStatus ? 'pointer' : 'not-allowed'
+                      }}>
+                        <span style={{
+                          ...styles.sliderBefore,
+                          ...(org.isActive ? styles.sliderChecked : {})
+                        }} />
+                      </span>
+                    </label>
+                  </Tooltip>
                 </td>
               </tr>
             );
@@ -347,6 +453,7 @@ export function FeTeamsManagement() {
             ) : organizations.length > 0 ? (
               <OrganizationTable
                 organizations={organizations}
+                currentOrgId={session?.currentOrg?.id}
                 onEdit={handleEditOrganization}
                 onToggleStatus={handleToggleOrganizationStatus}
               />
