@@ -22,11 +22,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Validate session
+    // Validate session and get full response with populated organizations
     const sessionService = SessionService.getInstance();
-    const validation = await sessionService.validateSession(sessionToken);
+    const sessionResponse = await sessionService.getCurrentSession(sessionToken);
 
-    if (!validation.isValid || !validation.session) {
+    if (!sessionResponse) {
       return NextResponse.json(
         { error: 'Invalid or expired session' },
         { status: 401 }
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     // Return session information
     return NextResponse.json({
       success: true,
-      data: validation.session
+      data: sessionResponse
     });
 
   } catch (error) {

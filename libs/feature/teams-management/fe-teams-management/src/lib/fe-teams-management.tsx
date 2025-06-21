@@ -4,6 +4,7 @@ import {
   TeamsApiService, 
   OrganizationListItem,
 } from './teams-api-service';
+import { AddNewOrg } from './add-new-org';
 
 // Styles - you can move these to CSS modules or styled-components
 const styles = {
@@ -198,6 +199,38 @@ const styles = {
     backgroundColor: '#dbeafe',
     color: '#1d4ed8',
     marginLeft: '8px'
+  },
+  sectionHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '16px'
+  },
+  sectionTitle: {
+    fontSize: '18px',
+    fontWeight: '600',
+    color: '#1f2937'
+  },
+  addButton: {
+    padding: '10px 16px',
+    backgroundColor: '#3b82f6',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '6px',
+    fontSize: '14px',
+    fontWeight: '500',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    transition: 'background-color 0.2s'
+  },
+  addButtonHover: {
+    backgroundColor: '#2563eb'
+  },
+  addButtonDisabled: {
+    backgroundColor: '#9ca3af',
+    cursor: 'not-allowed'
   }
 };
 
@@ -353,10 +386,14 @@ function OrganizationTable({ organizations, currentOrgId, onEdit, onToggleStatus
 }
 
 export function FeTeamsManagement() {
-  const { session } = useSession();
+  const { session, refreshSession, switchOrganization } = useSession();
   const [activeTab, setActiveTab] = useState('organizations');
   const [organizations, setOrganizations] = useState<OrganizationListItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  
+  // Constants for organization limits
+  const MAX_ORGANIZATIONS = 5;
 
   useEffect(() => {
     const loadOrganizations = async () => {
@@ -409,6 +446,41 @@ export function FeTeamsManagement() {
     }
   };
 
+  const handleAddOrganization = async (orgData: { name: string; description?: string }) => {
+    try {
+      const userId = session?.user?.id;
+      if (!userId) {
+        throw new Error('No user ID found in session');
+      }
+
+      const newOrg = await TeamsApiService.createOrganization(orgData, userId);
+      setOrganizations(prev => [...prev, newOrg]);
+      
+      // Check if user has no current organization before refresh
+      const shouldSwitchOrg = !session?.currentOrg || !session?.currentOrgId;
+      
+      // Refresh session to include the new organization in availableOrgs
+      // This prevents the redirect to none-org page
+      await refreshSession();
+      
+      // Switch to the new organization if user had no current organization
+      // Add a small delay to ensure session is updated
+      if (shouldSwitchOrg) {
+        try {
+          // Small delay to ensure session update has propagated
+          await new Promise(resolve => setTimeout(resolve, 500));
+          await switchOrganization(newOrg.id);
+        } catch (switchError) {
+          console.warn('Failed to auto-switch to new organization:', switchError);
+          // Not critical - user can manually switch later
+        }
+      }
+    } catch (error) {
+      console.error('Failed to create organization:', error);
+      throw error; // Re-throw to let the modal handle the error
+    }
+  };
+
   const tabs = [
     { id: 'organizations', label: 'Organization Management' },
     { id: 'members', label: 'Members' },
@@ -446,6 +518,36 @@ export function FeTeamsManagement() {
       <div>
         {activeTab === 'organizations' && (
           <div>
+            {/* Section Header with Add Button */}
+            <div style={styles.sectionHeader}>
+              <h3 style={styles.sectionTitle}>Organization Management</h3>
+              <button
+                style={{
+                  ...styles.addButton,
+                  ...(organizations.length >= MAX_ORGANIZATIONS ? styles.addButtonDisabled : {})
+                }}
+                onClick={() => setIsAddModalOpen(true)}
+                disabled={organizations.length >= MAX_ORGANIZATIONS}
+                onMouseEnter={(e) => {
+                  if (organizations.length < MAX_ORGANIZATIONS) {
+                    Object.assign(e.currentTarget.style, styles.addButtonHover);
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (organizations.length < MAX_ORGANIZATIONS) {
+                    Object.assign(e.currentTarget.style, styles.addButton);
+                  } else {
+                    Object.assign(e.currentTarget.style, {
+                      ...styles.addButton,
+                      ...styles.addButtonDisabled
+                    });
+                  }
+                }}
+              >
+                <span>+</span> ADD Organization
+              </button>
+            </div>
+
             {loading ? (
               <div style={{ textAlign: 'center', padding: '48px' }}>
                 Loading organizations...
@@ -462,6 +564,16 @@ export function FeTeamsManagement() {
                 No organizations found
               </div>
             )}
+
+            {/* Add Organization Modal */}
+            <AddNewOrg
+              isOpen={isAddModalOpen}
+              onClose={() => setIsAddModalOpen(false)}
+              onSubmit={handleAddOrganization}
+              maxOrgsReached={organizations.length >= MAX_ORGANIZATIONS}
+              currentOrgCount={organizations.length}
+              maxOrgs={MAX_ORGANIZATIONS}
+            />
           </div>
         )}
 

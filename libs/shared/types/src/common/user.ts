@@ -9,7 +9,6 @@ export interface IUser {
   active: boolean;
   title?: string;
   avatar?: string;
-  organizations?: Array<string>; // Array of organization IDs user belongs to
   currentOrgId?: string; // Currently active organization
   metaData?: {
     [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -26,7 +25,6 @@ export const defaultStaffUser: IUser = {
   emailid: '',
   permissions: [],
   active: true,
-  organizations: [],
   createdAt: new Date(),
   updatedAt: new Date()
 };

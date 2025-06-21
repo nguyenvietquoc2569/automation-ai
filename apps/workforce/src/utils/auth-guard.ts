@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SessionService, DatabaseService } from '@automation-ai/database';
-import { ISession } from '@automation-ai/types';
+import { ISessionResponse } from '@automation-ai/types';
 
 /**
- * Session data interface for type safety - using ISession from types
+ * Session data interface for type safety - using ISessionResponse for full session data
  */
-type SessionData = ISession;
+type SessionData = ISessionResponse;
 
 /**
  * Authentication guard utility for API routes
@@ -37,11 +37,11 @@ export class AuthGuard {
         };
       }
 
-      // Validate session
+      // Validate session and get full response with populated organizations
       const sessionService = SessionService.getInstance();
-      const validation = await sessionService.validateSession(sessionToken);
+      const sessionResponse = await sessionService.getCurrentSession(sessionToken);
 
-      if (!validation.isValid || !validation.session) {
+      if (!sessionResponse) {
         return {
           isValid: false,
           error: 'Invalid or expired session',
@@ -51,7 +51,7 @@ export class AuthGuard {
 
       return {
         isValid: true,
-        session: validation.session as SessionData,
+        session: sessionResponse,
         sessionToken
       };
 
@@ -110,9 +110,16 @@ export class AuthGuard {
    * Check if user belongs to specific organization
    */
   static belongsToOrganization(session: SessionData, organizationId: string): boolean {
-    const isCurrentOrg = session.currentOrg?.id === organizationId;
-    const isAvailableOrg = session.availableOrgs?.some((org) => org.id === organizationId) ?? false;
-    return isCurrentOrg || isAvailableOrg;
+    // Check if it's the current organization
+    const isCurrentOrg = session.currentOrgId === organizationId;
+    
+    // Check if it's in available organization IDs
+    const isInAvailableOrgIds = session.availableOrgIds?.includes(organizationId) ?? false;
+    
+    // Check if it's in available organizations array (if populated)
+    const isInAvailableOrgs = session.availableOrgs?.some((org) => org.id === organizationId) ?? false;
+    
+    return isCurrentOrg || isInAvailableOrgIds || isInAvailableOrgs;
   }
 
   /**
@@ -151,7 +158,7 @@ export class AuthGuard {
    */
   static withOrganization(handler: (request: NextRequest, session: SessionData, orgId: string) => Promise<NextResponse>) {
     return AuthGuard.withAuth(async (request: NextRequest, session: SessionData) => {
-      const orgId = session.currentOrg?.id;
+      const orgId = session.currentOrgId;
       if (!orgId) {
         return NextResponse.json(
           { error: 'No organization context available' },

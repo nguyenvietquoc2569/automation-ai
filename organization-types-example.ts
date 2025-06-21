@@ -39,7 +39,6 @@ const exampleUser: IUser = {
   permissions: ['user_management', 'project_create'],
   active: true,
   title: 'Senior Developer',
-  organizations: ['org_123', 'org_789'],
   currentOrgId: 'org_123',
   createdAt: new Date('2024-01-15'),
   updatedAt: new Date()

@@ -14,6 +14,7 @@ import {
   databaseService,
   sessionService,
   User,
+  UserRole,
   Organization,
   SessionType,
   type ISessionCreateRequest
@@ -200,12 +201,14 @@ async function createSecondOrganization(userId: string) {
   });
   await secondOrg.save();
 
-  // Add user to second organization
-  const user = await User.findById(userId);
-  if (user && user.organizations) {
-    user.organizations.push(secondOrg.id);
-    await user.save();
-  }
+  // Add user to second organization via UserRole (organizations field removed from User model)
+  await UserRole.create({
+    userId,
+    roleId: 'user-role-id', // You'd get this from a role lookup
+    organizationId: secondOrg.id,
+    assignedBy: userId,
+    isActive: true
+  });
 
   return secondOrg;
 }

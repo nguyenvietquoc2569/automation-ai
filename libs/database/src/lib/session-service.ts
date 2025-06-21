@@ -69,16 +69,31 @@ export class SessionService {
     // Determine the organization to use
     let targetOrgId = organizationId;
     if (!targetOrgId) {
-      // Use current org or first available org
-      targetOrgId = user.currentOrgId || user.organizations?.[0];
+      // Use current org or first available org from user roles
+      targetOrgId = user.currentOrgId;
+      
+      if (!targetOrgId) {
+        // Get first organization where user has an active role
+        const firstUserRole = await UserRole.findOne({
+          userId: user.id,
+          isActive: true
+        });
+        targetOrgId = firstUserRole?.organizationId;
+      }
     }
 
     if (!targetOrgId) {
       throw new Error('No organization found for user');
     }
 
-    // Verify user has access to the organization
-    if (!user.organizations?.includes(targetOrgId)) {
+    // Verify user has access to the organization through UserRole
+    const userRoleInOrg = await UserRole.findOne({
+      userId: user.id,
+      organizationId: targetOrgId,
+      isActive: true
+    });
+
+    if (!userRoleInOrg) {
       throw new Error('User does not have access to the specified organization');
     }
 
@@ -92,6 +107,12 @@ export class SessionService {
     const sessionToken = this.generateSessionToken();
     const refreshToken = crypto.randomBytes(32).toString('hex');
 
+    // Get all organizations where user has active roles
+    const userOrgRoles = await UserRole.find({
+      userId: user.id,
+      isActive: true
+    }).distinct('organizationId');
+
     // Calculate expiration
     const duration = rememberMe ? this.EXTENDED_SESSION_DURATION : this.DEFAULT_SESSION_DURATION;
     const expiresAt = new Date(Date.now() + duration);
@@ -102,7 +123,7 @@ export class SessionService {
       refreshToken,
       userId: user.id,
       currentOrgId: targetOrgId,
-      availableOrgIds: user.organizations || [], // Store only IDs
+      availableOrgIds: userOrgRoles, // Store only IDs from UserRole
       status: SessionStatus.ACTIVE,
       type: sessionType || SessionType.WEB,
       expiresAt,
@@ -237,8 +258,14 @@ export class SessionService {
       throw new Error('User not found');
     }
 
-    // Verify user has access to the new organization
-    if (!user.organizations?.includes(newOrgId)) {
+    // Verify user has access to the new organization through UserRole
+    const userRoleInNewOrg = await UserRole.findOne({
+      userId: user.id,
+      organizationId: newOrgId,
+      isActive: true
+    });
+
+    if (!userRoleInNewOrg) {
       throw new Error('User does not have access to the specified organization');
     }
 
@@ -311,11 +338,51 @@ export class SessionService {
       throw new Error('Session missing required user data');
     }
 
+    // Get fresh organization IDs from UserRole (to ensure we have the latest data)
+    const freshAvailableOrgIds = await UserRole.find({
+      userId: session.userId,
+      isActive: true
+    }).distinct('organizationId');
+
+    // Update the session document if the available orgs have changed
+    if (JSON.stringify(session.availableOrgIds?.sort()) !== JSON.stringify(freshAvailableOrgIds.sort())) {
+      session.availableOrgIds = freshAvailableOrgIds;
+      await session.save();
+    }
+
+    // Ensure current org is valid and user has access to it
+    let validCurrentOrgId: string | null = session.currentOrgId;
+    if (validCurrentOrgId && !freshAvailableOrgIds.includes(validCurrentOrgId)) {
+      // Current org is not in user's available orgs, switch to first available
+      validCurrentOrgId = freshAvailableOrgIds[0] || null;
+      if (validCurrentOrgId && validCurrentOrgId !== session.currentOrgId) {
+        session.currentOrgId = validCurrentOrgId;
+        await session.save();
+      } else if (!validCurrentOrgId) {
+        // User has no available organizations - this is a problematic state
+        // For now, set currentOrgId to empty string to avoid null assignment
+        session.currentOrgId = '';
+        await session.save();
+      }
+    }
+
+    // If no current org but user has available orgs, set the first one
+    if (!validCurrentOrgId && freshAvailableOrgIds.length > 0) {
+      validCurrentOrgId = freshAvailableOrgIds[0];
+      session.currentOrgId = validCurrentOrgId;
+      await session.save();
+    } else if (!validCurrentOrgId) {
+      // Edge case: user has no organizations at all
+      validCurrentOrgId = '';
+      session.currentOrgId = '';
+      await session.save();
+    }
+
     // Populate current organization
     let currentOrg = null;
-    if (session.currentOrgId) {
-      const org = await Organization.findById(session.currentOrgId);
-      if (org && org.active) {
+    if (validCurrentOrgId) {
+      const org = await Organization.findById(validCurrentOrgId);
+      if (org) {
         currentOrg = {
           id: org.id,
           name: org.name,
@@ -327,12 +394,12 @@ export class SessionService {
       }
     }
 
-    // Populate available organizations
+    // Populate available organizations using fresh data
     const availableOrgs = [];
-    if (session.availableOrgIds?.length) {
+    if (freshAvailableOrgIds?.length) {
       const orgs = await Organization.find({
-        _id: { $in: session.availableOrgIds },
-        active: true
+        _id: { $in: freshAvailableOrgIds }
+        // Note: Don't filter by active:true here, let frontend handle inactive orgs
       }).select('name displayName logo active');
 
       availableOrgs.push(...orgs.map(org => ({
@@ -358,13 +425,38 @@ export class SessionService {
         avatar: session.user.avatar,
         permissions: session.user.permissions || []
       },
-      currentOrgId: session.currentOrgId,
-      availableOrgIds: session.availableOrgIds || [],
+      currentOrgId: validCurrentOrgId || '',
+      availableOrgIds: freshAvailableOrgIds || [],
       currentOrg,
       availableOrgs,
       permissions: session.permissions || [],
       roles: session.roles || []
     };
+  }
+
+  /**
+   * Get current session with full response data (including populated organizations)
+   */
+  public async getCurrentSession(sessionToken: string): Promise<ISessionResponse | null> {
+    try {
+      const validation = await this.validateSession(sessionToken);
+      
+      if (!validation.isValid || !validation.session) {
+        return null;
+      }
+
+      // Find the session document to get full data
+      const session = await Session.findByToken(sessionToken);
+      if (!session) {
+        return null;
+      }
+
+      // Return full session response with populated organizations
+      return await this.buildSessionResponse(session);
+    } catch (error) {
+      console.error('Error getting current session:', error);
+      return null;
+    }
   }
 
   /**

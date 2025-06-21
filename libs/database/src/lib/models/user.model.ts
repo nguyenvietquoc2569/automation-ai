@@ -70,10 +70,7 @@ const userSchema = new Schema<IUserDocument>({
     type: String,
     trim: true
   },
-  organizations: [{
-    type: String,
-    trim: true
-  }],
+
   currentOrgId: {
     type: String,
     trim: true
@@ -88,7 +85,6 @@ const userSchema = new Schema<IUserDocument>({
 });
 
 // Indexes for better performance (excluding username and emailid as they already have unique indexes)
-userSchema.index({ organizations: 1 });
 userSchema.index({ active: 1 });
 userSchema.index({ currentOrgId: 1 });
 
@@ -149,10 +145,17 @@ userSchema.statics.findByEmailOrUsername = function(identifier: string) {
   });
 };
 
-// Static method to find active users in organization
-userSchema.statics.findActiveInOrganization = function(orgId: string) {
+// Static method to find active users in organization using UserRole
+userSchema.statics.findActiveInOrganization = async function(orgId: string) {
+  const userRoles = await mongoose.model('UserRole').find({
+    organizationId: orgId,
+    isActive: true
+  });
+  
+  const userIds = userRoles.map(ur => ur.userId);
+  
   return this.find({
-    organizations: orgId,
+    _id: { $in: userIds },
     active: true
   });
 };

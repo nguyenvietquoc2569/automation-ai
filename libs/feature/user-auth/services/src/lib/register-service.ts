@@ -45,7 +45,6 @@ export async function registerUserWithService(registrationData: RegistrationData
       avatar: userData.avatar,
       active: true,
       permissions: ['user'],
-      organizations: [],
       metaData: {}
     });
 
@@ -103,8 +102,7 @@ export async function registerUserWithService(registrationData: RegistrationData
       isActive: true
     });
 
-    // 5. Associate user with the organization
-    user.organizations = [organization.id];
+    // 5. Set current organization for the user (organization membership is now handled via UserRole)
     user.currentOrgId = organization.id;
     await user.save();
 
@@ -190,13 +188,9 @@ export async function getOrCreatePersonalOrg(userEmail: string): Promise<IOrg> {
         }
       });
 
-      // Update user's organizations
-      user.organizations = user.organizations || [];
-      if (!user.organizations.includes(organization.id)) {
-        user.organizations.push(organization.id);
-        if (!user.currentOrgId) {
-          user.currentOrgId = organization.id;
-        }
+      // Update user's current organization if not already set (organization membership is now handled via UserRole)
+      if (!user.currentOrgId) {
+        user.currentOrgId = organization.id;
         await user.save();
       }
     }

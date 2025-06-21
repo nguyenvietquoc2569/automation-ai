@@ -86,21 +86,51 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name } = body;
+    const { name, description } = body;
 
-    if (!name) {
+    if (!name || typeof name !== 'string' || name.trim().length === 0) {
       return NextResponse.json({
         success: false,
         error: 'Organization name is required'
       }, { status: 400 });
     }
 
-    // TODO: Implement organization creation
-    // This would require adding a createOrganization method to OrganizationService
+    if (name.trim().length < 2) {
+      return NextResponse.json({
+        success: false,
+        error: 'Organization name must be at least 2 characters'
+      }, { status: 400 });
+    }
+
+    if (name.trim().length > 100) {
+      return NextResponse.json({
+        success: false,
+        error: 'Organization name must be less than 100 characters'
+      }, { status: 400 });
+    }
+
+    if (description && (typeof description !== 'string' || description.length > 500)) {
+      return NextResponse.json({
+        success: false,
+        error: 'Description must be a string with less than 500 characters'
+      }, { status: 400 });
+    }
+
+    const userId = validation.session.userId;
+
+    // Create the organization
+    const organization = await OrganizationService.createOrganization(
+      {
+        name: name.trim(),
+        description: description?.trim()
+      },
+      userId
+    );
+
     return NextResponse.json({
-      success: false,
-      error: 'Organization creation not yet implemented'
-    }, { status: 501 });
+      success: true,
+      organization
+    }, { status: 201 });
 
   } catch (error) {
     console.error('Error in POST /api/teams/organizations:', error);

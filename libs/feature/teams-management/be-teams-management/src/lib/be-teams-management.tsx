@@ -34,34 +34,37 @@ export class OrganizationService {
    */
   static async getUserOrganizations(userId: string): Promise<OrganizationListItem[]> {
     try {
-      // Get user with their organizations
-      const user = await User.findById(userId).select('organizations');
-      if (!user || !user.organizations?.length) {
+      // Get all active user roles for this user
+      const userRoles = await UserRole.find({
+        userId,
+        isActive: true
+      }).populate('roleId');
+
+      if (!userRoles.length) {
         return [];
       }
 
-      // Get all organizations the user belongs to
+      // Get unique organization IDs from user roles
+      const orgIds = [...new Set(userRoles.map(ur => ur.organizationId))];
+
+      // Get all organizations the user belongs to through roles
       const organizations = await Organization.find({
-        _id: { $in: user.organizations },
+        _id: { $in: orgIds },
         active: true
       });
 
       const orgResults: OrganizationListItem[] = [];
 
       for (const org of organizations) {
-        // Get user roles in this organization
-        const userRoles = await UserRole.find({
-          userId,
-          organizationId: org.id,
-          isActive: true
-        }).populate('roleId');
+        // Get user roles in this specific organization
+        const orgUserRoles = userRoles.filter(ur => ur.organizationId === org.id);
 
         // Extract permissions from all roles
         const allPermissions: string[] = [];
         const roleNames: string[] = [];
         const roleDisplayNames: string[] = [];
 
-        for (const userRole of userRoles) {
+        for (const userRole of orgUserRoles) {
           if (userRole.roleId) {
             let role;
             if (typeof userRole.roleId === 'object') {
@@ -100,9 +103,14 @@ export class OrganizationService {
         // Remove duplicate permissions
         const uniquePermissions = [...new Set(allPermissions)];
 
-        // Get member count for this organization
+        // Get member count for this organization using UserRole
+        const orgUserRolesDocs = await UserRole.find({
+          organizationId: org.id,
+          isActive: true
+        }).distinct('userId');
+        
         const memberCount = await User.countDocuments({
-          organizations: org.id,
+          _id: { $in: orgUserRolesDocs },
           active: true
         });
 
@@ -247,6 +255,92 @@ export class OrganizationService {
    */
   static async toggleOrganizationStatus(orgId: string, isActive: boolean, userId: string): Promise<OrganizationListItem> {
     return this.updateOrganization(orgId, { isActive }, userId);
+  }
+
+  /**
+   * Create a new organization and assign the creator as owner
+   */
+  static async createOrganization(
+    orgData: { name: string; description?: string },
+    userId: string
+  ): Promise<OrganizationListItem> {
+    try {
+      // Check if user already has maximum number of organizations
+      const userOrgs = await this.getUserOrganizations(userId);
+      const MAX_ORGANIZATIONS = 5;
+      
+      if (userOrgs.length >= MAX_ORGANIZATIONS) {
+        throw new Error(`Maximum organization limit reached. You can only belong to ${MAX_ORGANIZATIONS} organizations.`);
+      }
+
+      // Check if organization name already exists (case-insensitive)
+      const existingOrg = await Organization.findOne({
+        name: { $regex: new RegExp(`^${orgData.name}$`, 'i') }
+      });
+      
+      if (existingOrg) {
+        throw new Error('An organization with this name already exists');
+      }
+
+      // Create the organization
+      const organization = new Organization({
+        name: orgData.name,
+        displayName: orgData.name, // Default to the same as name
+        description: orgData.description,
+        active: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      const savedOrg = await organization.save();
+
+      // Create owner role for this organization
+      const ownerRole = await Role.createOwnerRole(savedOrg.id);
+
+      // Create user role assignment
+      const userRole = new UserRole({
+        userId,
+        roleId: ownerRole.id,
+        organizationId: savedOrg.id,
+        assignedBy: userId, // Self-assigned since user is creating the org
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      await userRole.save();
+
+      // Set as current organization if user doesn't have one (organization membership is now handled via UserRole)
+      const user = await User.findById(userId);
+      if (!user?.currentOrgId) {
+        await User.findByIdAndUpdate(userId, {
+          currentOrgId: savedOrg.id,
+          updatedAt: new Date()
+        });
+      }
+
+      // Note: Session availableOrgIds will be automatically updated by the session service
+      // when buildSessionResponse is called, as it now queries UserRole for fresh data
+
+      // Return the organization in the expected format
+      return {
+        id: savedOrg.id,
+        name: savedOrg.name,
+        displayName: savedOrg.displayName,
+        description: savedOrg.description,
+        isActive: savedOrg.active,
+        memberCount: 1, // Creator is the first member
+        userRole: 'Organization Owner',
+        userPermissions: ownerRole.permissions,
+        createdAt: savedOrg.createdAt || new Date(),
+        updatedAt: savedOrg.updatedAt || new Date(),
+      };
+    } catch (error) {
+      console.error('Error creating organization:', error);
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Failed to create organization');
+    }
   }
 
   /**

@@ -118,4 +118,37 @@ export class TeamsApiService {
       throw error;
     }
   }
+
+  /**
+   * Create a new organization
+   */
+  static async createOrganization(
+    orgData: { name: string; description?: string },
+    userId: string
+  ): Promise<OrganizationListItem> {
+    try {
+      const response = await fetch('/api/teams/organizations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: orgData.name,
+          description: orgData.description,
+          userId
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Failed to create organization: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data.organization;
+    } catch (error) {
+      console.error('Error creating organization:', error);
+      throw error;
+    }
+  }
 }
