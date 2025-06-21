@@ -7,6 +7,7 @@ import {
 } from './teams-api-service';
 import { AddNewOrg } from './add-new-org';
 import { EditOrgModal } from './edit-org-modal';
+import { RoleManagement, type RoleItem } from './role-management';
 
 // Styles - you can move these to CSS modules or styled-components
 const styles = {
@@ -500,6 +501,11 @@ export function FeTeamsManagement() {
     }
   };
 
+  const handleEditRole = (role: RoleItem) => {
+    console.log('Edit role:', role);
+    // TODO: Implement role edit modal
+  };
+
   const tabs = [
     { id: 'organizations', label: 'Organization Management' },
     { id: 'members', label: 'Members' },
@@ -614,9 +620,10 @@ export function FeTeamsManagement() {
         )}
 
         {activeTab === 'roles' && (
-          <div style={{ padding: '48px', textAlign: 'center', color: '#6b7280' }}>
-            Roles & permissions management coming soon...
-          </div>
+          <RoleManagement 
+            organizations={organizations}
+            onEditRole={handleEditRole}
+          />
         )}
 
         {activeTab === 'settings' && (
