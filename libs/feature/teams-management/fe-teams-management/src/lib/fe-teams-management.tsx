@@ -3,8 +3,10 @@ import { useSession } from '@automation-ai/fe-session-management';
 import { 
   TeamsApiService, 
   OrganizationListItem,
+  OrganizationUpdateRequest,
 } from './teams-api-service';
 import { AddNewOrg } from './add-new-org';
+import { EditOrgModal } from './edit-org-modal';
 
 // Styles - you can move these to CSS modules or styled-components
 const styles = {
@@ -391,6 +393,8 @@ export function FeTeamsManagement() {
   const [organizations, setOrganizations] = useState<OrganizationListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingOrganization, setEditingOrganization] = useState<OrganizationListItem | null>(null);
   
   // Constants for organization limits
   const MAX_ORGANIZATIONS = 5;
@@ -421,10 +425,8 @@ export function FeTeamsManagement() {
   }, [session?.user?.id]);
 
   const handleEditOrganization = (org: OrganizationListItem) => {
-    // TODO: Open edit modal/form
-    console.log('Edit organization:', org);
-    // Use console.log instead of alert for now - replace with proper modal
-    console.log(`Edit organization: ${org.displayName || org.name}`);
+    setEditingOrganization(org);
+    setIsEditModalOpen(true);
   };
 
   const handleToggleOrganizationStatus = async (org: OrganizationListItem, newStatus: boolean) => {
@@ -477,6 +479,23 @@ export function FeTeamsManagement() {
       }
     } catch (error) {
       console.error('Failed to create organization:', error);
+      throw error; // Re-throw to let the modal handle the error
+    }
+  };
+
+  const handleUpdateOrganization = async (orgId: string, updateData: OrganizationUpdateRequest) => {
+    try {
+      const userId = session?.user?.id;
+      if (!userId) {
+        throw new Error('No user ID found in session');
+      }
+
+      const updatedOrg = await TeamsApiService.updateOrganization(orgId, updateData, userId);
+      setOrganizations(prev => 
+        prev.map(o => o.id === orgId ? updatedOrg : o)
+      );
+    } catch (error) {
+      console.error('Failed to update organization:', error);
       throw error; // Re-throw to let the modal handle the error
     }
   };
@@ -573,6 +592,17 @@ export function FeTeamsManagement() {
               maxOrgsReached={organizations.length >= MAX_ORGANIZATIONS}
               currentOrgCount={organizations.length}
               maxOrgs={MAX_ORGANIZATIONS}
+            />
+
+            {/* Edit Organization Modal */}
+            <EditOrgModal
+              isOpen={isEditModalOpen}
+              onClose={() => {
+                setIsEditModalOpen(false);
+                setEditingOrganization(null);
+              }}
+              onSubmit={handleUpdateOrganization}
+              organization={editingOrganization}
             />
           </div>
         )}

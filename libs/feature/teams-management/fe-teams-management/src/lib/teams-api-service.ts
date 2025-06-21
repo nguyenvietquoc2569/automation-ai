@@ -108,11 +108,20 @@ export class TeamsApiService {
         }),
       });
 
-      if (!response.ok) {
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        // If JSON parsing fails, use status text
         throw new Error(`Failed to update organization: ${response.statusText}`);
       }
 
-      const data = await response.json();
+      if (!response.ok) {
+        // Extract error message from response body if available
+        const errorMessage = data.error || `Failed to update organization: ${response.statusText}`;
+        throw new Error(errorMessage);
+      }
+
       return data.organization;
     } catch (error) {
       console.error('Error updating organization:', error);
