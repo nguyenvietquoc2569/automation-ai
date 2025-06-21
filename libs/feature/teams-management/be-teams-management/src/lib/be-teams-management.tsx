@@ -32,7 +32,7 @@ export class OrganizationService {
   /**
    * Get all organizations that the user belongs to with their roles and permissions
    */
-  static async getUserOrganizations(userId: string): Promise<OrganizationListItem[]> {
+  static async getUserOrganizations(userId: string, includeInactive = true): Promise<OrganizationListItem[]> {
     try {
       // Get all active user roles for this user
       const userRoles = await UserRole.find({
@@ -47,11 +47,13 @@ export class OrganizationService {
       // Get unique organization IDs from user roles
       const orgIds = [...new Set(userRoles.map(ur => ur.organizationId))];
 
-      // Get all organizations the user belongs to through roles
-      const organizations = await Organization.find({
-        _id: { $in: orgIds },
-        active: true
-      });
+      // Get organizations the user belongs to through roles
+      const orgQuery: { _id: { $in: string[] }; active?: boolean } = { _id: { $in: orgIds } };
+      if (!includeInactive) {
+        orgQuery.active = true; // Only include active orgs if requested
+      }
+      
+      const organizations = await Organization.find(orgQuery);
 
       const orgResults: OrganizationListItem[] = [];
 
@@ -194,7 +196,7 @@ export class OrganizationService {
   static async updateOrganization(orgId: string, updates: OrganizationUpdateRequest, userId: string): Promise<OrganizationListItem> {
     try {
       // Verify user has permission to update this organization
-      const userOrgs = await this.getUserOrganizations(userId);
+      const userOrgs = await this.getUserOrganizations(userId, true); // Include inactive orgs for management
       const userOrg = userOrgs.find(o => o.id === orgId);
       
       if (!userOrg) {
@@ -266,11 +268,12 @@ export class OrganizationService {
   ): Promise<OrganizationListItem> {
     try {
       // Check if user already has maximum number of organizations
-      const userOrgs = await this.getUserOrganizations(userId);
+      const activeUserOrgs = await this.getUserOrganizations(userId, false); // Only get active orgs for limit check
       const MAX_ORGANIZATIONS = 5;
       
-      if (userOrgs.length >= MAX_ORGANIZATIONS) {
-        throw new Error(`Maximum organization limit reached. You can only belong to ${MAX_ORGANIZATIONS} organizations.`);
+      // Count active organizations toward the limit
+      if (activeUserOrgs.length >= MAX_ORGANIZATIONS) {
+        throw new Error(`Maximum organization limit reached. You can only belong to ${MAX_ORGANIZATIONS} active organizations.`);
       }
 
       // Check if organization name already exists (case-insensitive)
@@ -348,7 +351,7 @@ export class OrganizationService {
    */
   static async getOrganizationById(orgId: string, userId: string): Promise<OrganizationListItem | null> {
     try {
-      const userOrgs = await this.getUserOrganizations(userId);
+      const userOrgs = await this.getUserOrganizations(userId, true); // Include inactive orgs for management
       return userOrgs.find(o => o.id === orgId) || null;
     } catch (error) {
       console.error('Error fetching organization by ID:', error);
@@ -361,7 +364,7 @@ export class OrganizationService {
    */
   static async checkUserPermission(userId: string, orgId: string, permission: string): Promise<boolean> {
     try {
-      const userOrgs = await this.getUserOrganizations(userId);
+      const userOrgs = await this.getUserOrganizations(userId, true); // Include inactive orgs for permission checks
       const userOrg = userOrgs.find(o => o.id === orgId);
       
       if (!userOrg) {

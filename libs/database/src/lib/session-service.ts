@@ -398,8 +398,8 @@ export class SessionService {
     const availableOrgs = [];
     if (freshAvailableOrgIds?.length) {
       const orgs = await Organization.find({
-        _id: { $in: freshAvailableOrgIds }
-        // Note: Don't filter by active:true here, let frontend handle inactive orgs
+        _id: { $in: freshAvailableOrgIds },
+        active: true // Only show active orgs in the organization switcher
       }).select('name displayName logo active');
 
       availableOrgs.push(...orgs.map(org => ({

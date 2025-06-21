@@ -30,9 +30,10 @@ export class TeamsApiService {
   /**
    * Get all organizations that the user belongs to with their roles and permissions
    */
-  static async getUserOrganizations(userId: string): Promise<OrganizationListItem[]> {
+  static async getUserOrganizations(userId: string, includeInactive = true): Promise<OrganizationListItem[]> {
     try {
-      const response = await fetch('/api/teams/organizations');
+      const url = `/api/teams/organizations${includeInactive ? '?includeInactive=true' : ''}`;
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch organizations: ${response.statusText}`);
       }

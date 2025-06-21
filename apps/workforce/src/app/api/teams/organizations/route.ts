@@ -3,14 +3,20 @@ import { OrganizationService } from '@automation-ai/be-teams-management';
 import { SessionService, DatabaseService } from '@automation-ai/database';
 
 /**
- * GET /api/teams/organizations
+ * GET /api/teams/organizations?includeInactive=true
  * Get all organizations that the current user belongs to
+ * Query params:
+ * - includeInactive: boolean - if true, includes inactive organizations (for management)
  */
 export async function GET(request: NextRequest) {
   try {
     // Initialize database connection if not already connected
     const dbService = DatabaseService.getInstance();
     await dbService.initialize();
+
+    // Check if we should include inactive organizations
+    const url = new URL(request.url);
+    const includeInactive = url.searchParams.get('includeInactive') === 'true';
 
     // Get session token from cookie or Authorization header
     const sessionToken = request.cookies.get('sessionToken')?.value ||
@@ -37,7 +43,7 @@ export async function GET(request: NextRequest) {
     const userId = validation.session.userId;
 
     // Get organizations for the user
-    const organizations = await OrganizationService.getUserOrganizations(userId);
+    const organizations = await OrganizationService.getUserOrganizations(userId, includeInactive);
 
     return NextResponse.json({
       success: true,
