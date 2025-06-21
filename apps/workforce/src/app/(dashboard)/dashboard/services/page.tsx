@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import { ProtectedRoute } from '@automation-ai/fe-session-management';
 import { DashboardLayout } from '@automation-ai/fe-dashboard';
 import { ServiceList } from '@automation-ai/fe-services';
 
@@ -31,15 +30,13 @@ export default function ServicesPage() {
   };
 
   return (
-    <ProtectedRoute>
-      <DashboardLayout 
-        breadcrumbItems={breadcrumbItems}
-        title="Service Management"
-        notificationCount={5}
-        footerProps={footerProps}
-      >
-        <ServiceList />
-      </DashboardLayout>
-    </ProtectedRoute>
+    <DashboardLayout 
+      breadcrumbItems={breadcrumbItems}
+      title="Service Management"
+      notificationCount={5}
+      footerProps={footerProps}
+    >
+      <ServiceList />
+    </DashboardLayout>
   );
 }

@@ -1,6 +1,5 @@
 'use client';
 
-import { ProtectedRoute } from '@automation-ai/fe-session-management';
 import { DashboardLayout } from '@automation-ai/fe-dashboard';
 import { FeTeamsManagement } from '@automation-ai/fe-teams-management';
 
@@ -31,15 +30,13 @@ export default function TeamsPage() {
   };
 
   return (
-    <ProtectedRoute>
-      <DashboardLayout 
-        breadcrumbItems={breadcrumbItems}
-        title="Teams Management"
-        notificationCount={5}
-        footerProps={footerProps}
-      >
-        <FeTeamsManagement />
-      </DashboardLayout>
-    </ProtectedRoute>
+    <DashboardLayout 
+      breadcrumbItems={breadcrumbItems}
+      title="Teams Management"
+      notificationCount={5}
+      footerProps={footerProps}
+    >
+      <FeTeamsManagement />
+    </DashboardLayout>
   );
 }

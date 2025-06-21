@@ -4,8 +4,6 @@ import {
   Organization,
   UserRole,
   type ISessionDocument,
-  type IUserDocument,
-  type IOrgDocument,
   type IUserRoleDocument
 } from './models';
 import {
@@ -104,6 +102,7 @@ export class SessionService {
       refreshToken,
       userId: user.id,
       currentOrgId: targetOrgId,
+      availableOrgIds: user.organizations || [], // Store only IDs
       status: SessionStatus.ACTIVE,
       type: sessionType || SessionType.WEB,
       expiresAt,
@@ -120,18 +119,6 @@ export class SessionService {
         avatar: user.avatar,
         permissions: user.permissions
       },
-      
-      // Cache organization data
-      currentOrg: {
-        id: organization.id,
-        name: organization.name,
-        displayName: organization.displayName,
-        logo: organization.logo,
-        subscription: organization.subscription
-      },
-      
-      // Get available organizations for the user
-      availableOrgs: await this.getUserOrganizations(user),
       
       // Set permissions and roles for this session based on user roles in current org
       permissions: await this.getUserPermissionsInOrg(user.id, targetOrgId),
@@ -166,7 +153,7 @@ export class SessionService {
     }
 
     // Return session response
-    return this.buildSessionResponse(session);
+    return await this.buildSessionResponse(session);
   }
 
   /**
@@ -229,7 +216,7 @@ export class SessionService {
     await session.updateActivity();
     await session.save();
 
-    return this.buildSessionResponse(session);
+    return await this.buildSessionResponse(session);
   }
 
   /**
@@ -255,21 +242,14 @@ export class SessionService {
       throw new Error('User does not have access to the specified organization');
     }
 
-    // Get new organization details
+    // Verify organization exists and is active
     const newOrg = await Organization.findById(newOrgId);
     if (!newOrg || !newOrg.active) {
       throw new Error('Organization not found or inactive');
     }
 
-    // Update session
+    // Update session - only store the ID
     session.currentOrgId = newOrgId;
-    session.currentOrg = {
-      id: newOrg.id,
-      name: newOrg.name,
-      displayName: newOrg.displayName,
-      logo: newOrg.logo,
-      subscription: newOrg.subscription
-    };
 
     // Update user's current organization
     user.currentOrgId = newOrgId;
@@ -278,7 +258,7 @@ export class SessionService {
     await session.updateActivity();
     await session.save();
 
-    return this.buildSessionResponse(session);
+    return await this.buildSessionResponse(session);
   }
 
   /**
@@ -324,32 +304,44 @@ export class SessionService {
   }
 
   /**
-   * Get organizations available to a user
+   * Build session response object - populates organization data from database
    */
-  private async getUserOrganizations(user: IUserDocument): Promise<Array<Partial<IOrgDocument>>> {
-    if (!user.organizations?.length) {
-      return [];
+  private async buildSessionResponse(session: ISessionDocument): Promise<ISessionResponse> {
+    if (!session.user) {
+      throw new Error('Session missing required user data');
     }
 
-    const orgs = await Organization.find({
-      _id: { $in: user.organizations },
-      active: true
-    }).select('name displayName logo');
+    // Populate current organization
+    let currentOrg = null;
+    if (session.currentOrgId) {
+      const org = await Organization.findById(session.currentOrgId);
+      if (org && org.active) {
+        currentOrg = {
+          id: org.id,
+          name: org.name,
+          displayName: org.displayName,
+          logo: org.logo,
+          isActive: org.active,
+          subscription: org.subscription
+        };
+      }
+    }
 
-    return orgs.map(org => ({
-      id: org.id,
-      name: org.name,
-      displayName: org.displayName,
-      logo: org.logo
-    }));
-  }
+    // Populate available organizations
+    const availableOrgs = [];
+    if (session.availableOrgIds?.length) {
+      const orgs = await Organization.find({
+        _id: { $in: session.availableOrgIds },
+        active: true
+      }).select('name displayName logo active');
 
-  /**
-   * Build session response object
-   */
-  private buildSessionResponse(session: ISessionDocument): ISessionResponse {
-    if (!session.user || !session.currentOrg) {
-      throw new Error('Session missing required user or organization data');
+      availableOrgs.push(...orgs.map(org => ({
+        id: org.id,
+        name: org.name,
+        displayName: org.displayName,
+        logo: org.logo,
+        isActive: org.active
+      })));
     }
 
     return {
@@ -366,19 +358,10 @@ export class SessionService {
         avatar: session.user.avatar,
         permissions: session.user.permissions || []
       },
-      currentOrg: {
-        id: session.currentOrg.id || '',
-        name: session.currentOrg.name || '',
-        displayName: session.currentOrg.displayName,
-        logo: session.currentOrg.logo,
-        subscription: session.currentOrg.subscription
-      },
-      availableOrgs: (session.availableOrgs || []).map(org => ({
-        id: org.id || '',
-        name: org.name || '',
-        displayName: org.displayName,
-        logo: org.logo
-      })),
+      currentOrgId: session.currentOrgId,
+      availableOrgIds: session.availableOrgIds || [],
+      currentOrg,
+      availableOrgs,
       permissions: session.permissions || [],
       roles: session.roles || []
     };

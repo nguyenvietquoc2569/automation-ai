@@ -1,5 +1,4 @@
 import type { IUser } from './user.js';
-import type { IOrg } from './organization.js';
 
 /**
  * Session status enumeration
@@ -72,7 +71,8 @@ export interface ISession {
   sessionToken: string; // Unique session identifier/JWT token
   refreshToken?: string; // For token refresh
   userId: string; // Reference to the user
-  currentOrgId: string; // Currently active organization
+  currentOrgId: string; // Currently active organization ID
+  availableOrgIds?: string[]; // Organization IDs user has access to
   status: SessionStatus;
   type: SessionType;
   
@@ -82,10 +82,8 @@ export interface ISession {
   expiresAt: Date;
   lastAccessAt?: Date;
   
-  // User and organization data (denormalized for performance)
+  // User data (denormalized for performance)
   user?: Partial<IUser>; // Cached user data (without sensitive info)
-  currentOrg?: Partial<IOrg>; // Cached current organization data
-  availableOrgs?: Array<Partial<IOrg>>; // Organizations user has access to
   
   // Security and tracking
   security?: ISessionSecurity;
@@ -132,21 +130,25 @@ export interface ISessionResponse {
     avatar?: string;
     permissions: Array<string>;
   };
-  currentOrg: {
+  currentOrgId: string | null;
+  availableOrgIds: string[];
+  currentOrg?: {
     id: string;
     name: string;
     displayName?: string;
     logo?: string;
+    isActive?: boolean;
     subscription?: {
       plan?: 'free' | 'basic' | 'premium' | 'enterprise';
       features?: Array<string>;
     };
-  };
+  } | null;
   availableOrgs?: Array<{
     id: string;
     name: string;
     displayName?: string;
     logo?: string;
+    isActive?: boolean;
   }>;
   permissions: Array<string>;
   roles?: Array<string>;

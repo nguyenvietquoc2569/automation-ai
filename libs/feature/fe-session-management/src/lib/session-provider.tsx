@@ -26,7 +26,9 @@ class ClientSessionAPI {
         success: boolean;
         data?: {
           user: SessionData['user'];
-          currentOrg: SessionData['currentOrg'];
+          currentOrgId: string | null;
+          availableOrgIds: string[];
+          currentOrg?: SessionData['currentOrg'];
           availableOrgs?: SessionData['availableOrgs'];
           expiresAt: string;
           permissions?: string[];
@@ -41,6 +43,8 @@ class ClientSessionAPI {
       return {
         sessionToken: '', // Token is in httpOnly cookie
         user: data.data.user,
+        currentOrgId: data.data.currentOrgId,
+        availableOrgIds: data.data.availableOrgIds,
         currentOrg: data.data.currentOrg,
         availableOrgs: data.data.availableOrgs || [],
         expiresAt: new Date(data.data.expiresAt),
@@ -79,7 +83,9 @@ class ClientSessionAPI {
         success: boolean;
         data?: {
           user: SessionData['user'];
-          currentOrg: SessionData['currentOrg'];
+          currentOrgId: string | null;
+          availableOrgIds: string[];
+          currentOrg?: SessionData['currentOrg'];
           availableOrgs?: SessionData['availableOrgs'];
           expiresAt: string;
           permissions?: string[];
@@ -94,6 +100,8 @@ class ClientSessionAPI {
       return {
         sessionToken: '',
         user: data.data.user,
+        currentOrgId: data.data.currentOrgId,
+        availableOrgIds: data.data.availableOrgIds,
         currentOrg: data.data.currentOrg,
         availableOrgs: data.data.availableOrgs || [],
         expiresAt: new Date(data.data.expiresAt),

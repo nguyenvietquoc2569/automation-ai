@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { ProtectedRoute, useSession } from '@automation-ai/fe-session-management';
+import { useSession } from '@automation-ai/fe-session-management';
 import { DashboardLayout } from '@automation-ai/fe-dashboard';
 import { 
   Card, 
@@ -293,15 +293,13 @@ export default function DashboardPage() {
   };
 
   return (
-    <ProtectedRoute>
-      <DashboardLayout 
-        breadcrumbItems={breadcrumbItems}
-        title="Workforce Dashboard"
-        notificationCount={5}
-        footerProps={footerProps}
-      >
-        <DashboardContent />
-      </DashboardLayout>
-    </ProtectedRoute>
+    <DashboardLayout 
+      breadcrumbItems={breadcrumbItems}
+      title="Workforce Dashboard"
+      notificationCount={5}
+      footerProps={footerProps}
+    >
+      <DashboardContent />
+    </DashboardLayout>
   );
 }

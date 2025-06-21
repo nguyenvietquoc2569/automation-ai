@@ -14,6 +14,7 @@ export interface SessionOrganization {
   name: string;
   displayName?: string;
   logo?: string;
+  isActive?: boolean;
   subscription?: {
     plan?: 'free' | 'basic' | 'premium' | 'enterprise';
     features?: string[];
@@ -23,13 +24,10 @@ export interface SessionOrganization {
 export interface SessionData {
   sessionToken: string;
   user: SessionUser;
-  currentOrg: SessionOrganization;
-  availableOrgs: Array<{
-    id: string;
-    name: string;
-    displayName?: string;
-    logo?: string;
-  }>;
+  currentOrgId: string | null; // Changed: Store only the ID
+  availableOrgIds: string[]; // Changed: Store only IDs
+  currentOrg?: SessionOrganization; // Populated data (optional for backwards compatibility)
+  availableOrgs?: SessionOrganization[]; // Populated data (optional for backwards compatibility)
   expiresAt: Date;
   permissions: string[];
   roles: string[];

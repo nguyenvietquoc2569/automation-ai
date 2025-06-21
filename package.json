@@ -74,6 +74,7 @@
     "apps/workforce/libs/shared/*",
     "libs/feature/workbench/*",
     "libs/feature/services/*",
-    "libs/feature/teams-management/*"
+    "libs/feature/teams-management/*",
+    "libs/feature/static-page/*"
   ]
 }

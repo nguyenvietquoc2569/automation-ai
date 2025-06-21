@@ -59,6 +59,9 @@
     },
     {
       "path": "./libs/feature/teams-management/be-teams-management"
+    },
+    {
+      "path": "./libs/feature/static-page/fe-none-org"
     }
   ]
 }

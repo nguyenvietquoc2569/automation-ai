@@ -136,15 +136,10 @@ const sessionSchema = new Schema<ISessionDocument>({
     default: {}
   },
   
-  // Cached current organization data
-  currentOrg: {
-    type: Schema.Types.Mixed,
-    default: {}
-  },
-  
-  // Available organizations for the user
-  availableOrgs: [{
-    type: Schema.Types.Mixed
+  // Available organization IDs for the user
+  availableOrgIds: [{
+    type: String,
+    trim: true
   }],
   
   // Security and device information

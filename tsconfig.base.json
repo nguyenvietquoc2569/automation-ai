@@ -45,6 +45,9 @@
       "@automation-ai/multiple-lang": [
         "libs/shared/multiple-lang/src/index.ts"
       ],
+      "@automation-ai/static-page-nonr-org": [
+        "libs/feature/static-page/fe-none-org/src/index.ts"
+      ],
       "@automation-ai/types": ["libs/shared/types/src/index.ts"],
       "@automation-ai/user-register-page": [
         "libs/feature/user-auth/user-register-page/src/index.ts"
